@@ -1,0 +1,24 @@
+conclusion for the time being utk each cards:
+- buat specialized store for these cards:
+	- pBattleCard
+		- the monster itself
+		- digivolution stack too!
+	- oBattleCard
+	- playerOnlineCards -> OK
+	- oOnlineCards
+	- pOfflineCards -> supaya p boleh semak kad apa yg dah pakai
+	- oOfflineCards
+	- pDp
+		- dpCount
+		- dpCards
+	- oDp
+		- dpCount
+		- dpCards
+	- battleStats (winCount)
+	- playerHandCards -> OK
+		- card1, ..., card4
+	- oHandCards
+		- card1, ..., card4
+		
+make two different methods for setting digimon directly and by digivolving
+ - kalau sama susah nak apply penalty

@@ -1,0 +1,64 @@
+masa dipilih jadi activeOptionCard, tambah key-value pair callback
+
+listed methods tu hanya utk reduce redundancy je (ala DRY principle)
+so basically buat a master list of effects? refer contoh 1
+cuba implement contoh 1 kat card dalam option 1.
+cuba 2 kad dulu; 1 monster card, 1 option card.
+pastu cuba 1 top online card.
+
+#####
+Contoh 1
+
+参考リンク：https://dev.to/chrislemus/array-methods-and-callback-functions-for-beginners-50i8
+
+const effects = [
+  {
+    id: 1,
+    cardId: 0,
+    methodId: 1, // ni aggregated method punya ID
+    // aggregated method tu punya param. Perlu?
+    params: {
+      who: "me",
+      handCount: this.playerStore.handCount,
+    },
+    effect: (method, a, b) => {
+      const val = method(a,b)
+      // update Pinia values
+      console.log(`the value is ${val}`)
+    },
+  }
+]
+
+...
+
+(import the method from a master list of methods declared in Pinia?
+ kiranya method bawah ni declare kat Pinia je)
+
+// randomly discard n amount of cards from target's hand cards
+const discardHand = (target, n) => {
+	if (target == CONST.PLAYER) {
+		for (let i = 0; i < amount; i++) {
+  			this.playerStore.removeHand(randNum)
+		}
+	} else if (target == CONST.OPPONENT) {
+		for (let i = 0; i < n; i++) {
+  			this.opponentStore.removeHand(randNum)
+		}
+	}
+}
+
+...
+
+const execute = effects[this.activeOptionCard.effectId]
+execute.effect(this.discardHand, CONST.PLAYER, 2)
+
+#####
+
+install nodemon on backend server
+cuba pakai redis?? (ada free 30mb https://redis.com/try-free/) refer here: https://dev.to/nabajits21/exploding-kittens-card-game-react-nodejs-and-redis-part-2-4ohf
+
+#####
+
+user authentication/authorization
+ory network vs keycloak (dua2 open source)
+https://www.ory.sh/docs/getting-started/integrate-auth/vue
