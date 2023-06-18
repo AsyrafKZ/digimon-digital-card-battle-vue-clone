@@ -48,7 +48,6 @@ export const usePlayerHandCardsStore = defineStore('playerHandCards', {
             for (const hand in this.hands) {
                 if (Object.hasOwnProperty.call(this.hands, hand)) {
                     if (this.hands[hand].id == id) {
-                        // usePlayerOfflineCardsStore().setOffline(this.hands[hand].id)
                         this.hands[hand] = {}
                         break;
                     }

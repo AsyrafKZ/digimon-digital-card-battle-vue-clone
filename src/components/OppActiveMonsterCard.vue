@@ -42,18 +42,18 @@ export default {
     };
   },
   ready() {
-      // this.hp = this.oppActiveCardsStore.battleCard.hp
-      //   ? this.oppActiveCardsStore.battleCard.hp
-      //   : "";
-      // this.cPow = this.oppActiveCardsStore.battleCard.cPow
-      //   ? this.oppActiveCardsStore.battleCard.cPow
-      //   : "";
-      // this.tPow = this.oppActiveCardsStore.battleCard.tPow
-      //   ? this.oppActiveCardsStore.battleCard.tPow
-      //   : "";
-      // this.xPow = this.oppActiveCardsStore.battleCard.xPow
-      //   ? this.oppActiveCardsStore.battleCard.xPow
-      //   : "";
+      this.hp = this.oppActiveCardsStore.battleCard.hp
+        ? this.oppActiveCardsStore.battleCard.hp
+        : "";
+      this.cPow = this.oppActiveCardsStore.battleCard.cPow
+        ? this.oppActiveCardsStore.battleCard.cPow
+        : "";
+      this.tPow = this.oppActiveCardsStore.battleCard.tPow
+        ? this.oppActiveCardsStore.battleCard.tPow
+        : "";
+      this.xPow = this.oppActiveCardsStore.battleCard.xPow
+        ? this.oppActiveCardsStore.battleCard.xPow
+        : "";
   },
   computed: {
     ...mapStores(useOppActiveCardsStore),

@@ -47,7 +47,6 @@ export const useOppOnlineCardsStore = defineStore('oppOnlineCards', {
         },
         addCard(id) {
             this.cards.push(id)
-        }
-
+        },
     }
 })

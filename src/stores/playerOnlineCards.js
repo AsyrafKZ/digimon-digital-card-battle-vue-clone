@@ -9,6 +9,7 @@ export const usePlayerOnlineCardsStore = defineStore('playerOnlineCards', {
         count() {
             return this.cards.length
         },
+        // TODO: wait, [0] is top or bottom?? mana2 boleh, yg penting consistent satu sistem
         topCard() {
             return this.cards[0]
         }
@@ -44,6 +45,8 @@ export const usePlayerOnlineCardsStore = defineStore('playerOnlineCards', {
         drawOne() {
             this.cards.shift();
         },
-
+        addCard(id) {
+            this.cards.push(id)
+        },
     }
 })

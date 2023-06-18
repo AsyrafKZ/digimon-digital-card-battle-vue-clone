@@ -30,9 +30,12 @@ export const createMonsterCard = (target) => {
         }
     }
     const card = {
-        ...targetCard,
         id: target,
+        name: targetCard.name,
         level: targetCard.level,
+        hp: targetCard.hp,
+        pp: targetCard.pp,
+        dp: targetCard.dp,
         specialty: targetCard.specialty,
         imgSrc: "src/images/monsters/" + targetCard.number + ".jpg",
         colorTop: "",
@@ -47,6 +50,7 @@ export const createMonsterCard = (target) => {
         xPow: targetCard.x_pow,
         support: renderButton(targetCard.support),
         supportSpeed: targetCard.support_speed,
+        isPartner: targetCard.isPartner,
     };
     const specialtyList = cardDetails.specialtyList
     for (let index = 0; index < specialtyList.length; index++) {
