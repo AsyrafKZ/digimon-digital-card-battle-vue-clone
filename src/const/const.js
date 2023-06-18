@@ -25,7 +25,7 @@ export const CONST = {
     PLAYER: "player",
     OPP: "opponent",
     // Attack Choice
-    C: "circle",
+    O: "circle",
     T: "triangle",
     X: "cross",
     // Effect Activation Speed

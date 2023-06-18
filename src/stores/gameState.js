@@ -5,7 +5,7 @@ import { usePlayerActiveCardsStore } from "./playerActiveCards";
 import { useOppActiveCardsStore } from "./oppActiveCards";
 
 const setPow = (choice) => {
-    if (choice == CONST.C) {
+    if (choice == CONST.O) {
         if (who == CONST.PLAYER) {
             return usePlayerActiveCardsStore().cPow
         }
