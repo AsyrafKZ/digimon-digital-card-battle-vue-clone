@@ -26,15 +26,18 @@
       <EmptyCard v-else />
     </v-col>
     <!-- Player B Playing Card -->
-    <OppActiveMonsterCard
-      v-if="isOppMonsterCard"
-    />
+    <OppActiveMonsterCard v-if="isOppMonsterCard" />
     <EmptyCard v-else />
     <!-- Player B DP -->
     <v-col cols="auto">
       <v-col> {{ oppDpStore.dp }} </v-col>
     </v-col>
   </v-row>
+  <!-- Battle Window -->
+  <AttackSelectWindow
+  />
+    <!-- :playerCard="playerActiveCardsStore.battleCard"
+    :oppCard="oppActiveCardsStore.battleCard" -->
 </template>
 
 <script>
@@ -43,6 +46,7 @@ import OppOptionCard from "./OppOptionCard.vue";
 import EmptyCard from "./EmptyCard.vue";
 import ActiveMonsterCard from "./ActiveMonsterCard.vue";
 import OppActiveMonsterCard from "./OppActiveMonsterCard.vue";
+import AttackSelectWindow from "./AttackSelectWindow.vue";
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
 import { usePlayerDpStore } from "../stores/playerDp";
@@ -56,6 +60,7 @@ export default {
     EmptyCard,
     ActiveMonsterCard,
     OppActiveMonsterCard,
+    AttackSelectWindow,
   },
   data() {
     return {

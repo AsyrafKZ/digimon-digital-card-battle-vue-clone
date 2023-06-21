@@ -68,9 +68,23 @@ export const useGameStateStore = defineStore('gameState', {
         oppWinCount: 0,
         firstAttack: "",
         playerAttack: "",
-        oppSelect: "",
+        oppAttack: "",
     }),
+    getters: {
+        playerSelectedAttack: function () {
+            return this.playerAttack
+        },
+        oppSelectedAttack: function () {
+            return this.oppAttack
+        },
+    },
     actions: {
+        setPlayerAttack: function (selectedAttack) {
+            this.playerAttack = selectedAttack
+        },
+        setOppAttack: function (selectedAttack) {
+            this.oppAttack = selectedAttack
+        },
         startBattle: function () {
             this.setEffect()
             if (this.firstAttack == CONST.PLAYER) {
