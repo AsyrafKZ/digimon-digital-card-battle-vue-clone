@@ -9,22 +9,6 @@
       <!-- Player A -->
       <Player/>
     </v-container>
-
-    <!-- TODO: clicked, option button appears thingy. -->
-    <v-menu
-      location="top center"
-      origin="auto"
-      transition="scroll-x-transition"
-    >
-      <template v-slot:activator="{ props }">
-        <v-btn color="primary" icon v-bind="props">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </template>
-      <v-btn class="mt-2" color="error" icon>
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-    </v-menu>
   </v-container>
 </template>
 

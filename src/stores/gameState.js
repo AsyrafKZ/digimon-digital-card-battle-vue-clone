@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 import { usePlayerActiveCardsStore } from "./playerActiveCards";
 import { useOppActiveCardsStore } from "./oppActiveCards";
 
-const setPow = (choice) => {
+const setPow = (who, choice) => {
     if (choice == CONST.O) {
         if (who == CONST.PLAYER) {
             return usePlayerActiveCardsStore().cPow
@@ -63,7 +63,7 @@ const executeEffects = (speeds) => {
 export const useGameStateStore = defineStore('gameState', {
     state: () => ({
         turn: "0",
-        phases: "",
+        phase: "",
         playerWinCount: 0,
         oppWinCount: 0,
         firstAttack: "",
@@ -85,10 +85,17 @@ export const useGameStateStore = defineStore('gameState', {
         setOppAttack: function (selectedAttack) {
             this.oppAttack = selectedAttack
         },
+        setWhoAttackFirst: function (who) {
+            this.firstAttack = who
+        },
+        setPhase: function (nextPhase) {
+            this.phase = nextPhase
+        },
         startBattle: function () {
-            this.setEffect()
+            // this.setEffect()
             if (this.firstAttack == CONST.PLAYER) {
                 const playerDmg = setPow(CONST.PLAYER, this.playerAttack)
+                console.log(`playerDmg to opponent:${playerDmg}`)
                 useOppActiveCardsStore().addHp(-parseInt(playerDmg))
                 const oppDmg = setPow(CONST.OPP, this.oppAttack)
                 usePlayerActiveCardsStore().addHp(-parseInt(oppDmg))

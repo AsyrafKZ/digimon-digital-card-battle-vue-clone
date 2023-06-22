@@ -58,7 +58,7 @@ export const useOppHandCardsStore = defineStore('oppHandCards', {
             for (const hand in this.hands) {
                 if (Object.hasOwnProperty.call(this.hands, hand)) {
                     if (Object.keys(this.hands[hand]).length == 0) {
-                        this.hands[hand] = this.setOne();
+                        this.hands[hand] = this.getCard();
                     }
                 }
             }

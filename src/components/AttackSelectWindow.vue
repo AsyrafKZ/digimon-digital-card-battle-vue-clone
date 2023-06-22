@@ -12,7 +12,7 @@
             indeterminate
           ></v-progress-linear>
         </template>
-        <v-list density="comfortable"  bg-color="blue-accent-1">
+        <v-list density="comfortable" bg-color="blue-accent-1">
           <v-list-subheader class="text-h4" color="white">
             <v-row>
               <v-col>
@@ -121,6 +121,7 @@ import { mapStores } from "pinia";
 import { useGameStateStore } from "../stores/gameState";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
 import { useOppActiveCardsStore } from "../stores/oppActiveCards";
+import { CONST } from "@/const/const";
 
 export default {
   data() {
@@ -190,7 +191,7 @@ export default {
           isDisabled: true,
           isSelected: false,
         },
-      ]
+      ];
     },
     oppCard: function () {
       this.oppAttacks = [
@@ -230,30 +231,44 @@ export default {
           isDisabled: true,
           isSelected: false,
         },
-      ]
-    }
+      ];
+    },
+    "gameStateStore.playerAttack": function () {
+      this.endAttackSelectPhase();
+    },
+    "gameStateStore.oppAttack": function () {
+      this.endAttackSelectPhase();
+    },
+    open: function (isOpen) {
+      if (isOpen) {
+        this.setDisable(false);
+        this.setInitialState();
+      } else {
+        this.setDisable(true);
+      }
+    },
   },
   methods: {
     playerSelected: function (val) {
       if (val == this.xEffect) {
         return;
       }
-      let attack = "";
       this.playerAttacks.forEach((attack, i) => {
         if (val == i) {
           attack.isSelected = !attack.isSelected;
           if (attack.isSelected) {
             this.playerAttack = attack.icon;
             this.hasPlayerSelected = true;
+            this.gameStateStore.setPlayerAttack(this.setAttackName(val));
           } else {
             this.playerAttack = "";
             this.hasPlayerSelected = false;
+            this.gameStateStore.setPlayerAttack("");
           }
         } else {
           attack.isSelected = false;
         }
       });
-      this.gameStateStore.setPlayerAttack(attack);
       if (this.playerAttacks[this.xButton].isSelected) {
         this.playerAttacks[this.xEffect].isDisabled = false;
       } else {
@@ -264,27 +279,72 @@ export default {
       if (val == this.xEffect) {
         return;
       }
-      let attack = "";
       this.oppAttacks.forEach((attack, i) => {
         if (val == i) {
           attack.isSelected = !attack.isSelected;
           if (attack.isSelected) {
             this.oppAttack = attack.icon;
             this.hasOppSelected = true;
+            this.gameStateStore.setOppAttack(this.setAttackName(val));
           } else {
             this.oppAttack = "";
             this.hasOppSelected = false;
+            this.gameStateStore.setOppAttack("");
           }
         } else {
           attack.isSelected = false;
         }
       });
-      this.gameStateStore.setOppAttack(attack);
       if (this.oppAttacks[this.xButton].isSelected) {
         this.oppAttacks[this.xEffect].isDisabled = false;
       } else {
         this.oppAttacks[this.xEffect].isDisabled = true;
       }
+    },
+    setAttackName: function (i) {
+      if (i == 0) {
+        return CONST.O;
+      } else if (i == 1) {
+        return CONST.T;
+      } else if (i == 2) {
+        return CONST.X;
+      }
+    },
+    endAttackSelectPhase: function () {
+      if (
+        this.gameStateStore.playerSelectedAttack &&
+        this.gameStateStore.oppSelectedAttack
+      ) {
+        // disable players from change attack selection once both have chosen
+        this.setDisable(true);
+        setTimeout(() => {
+          this.open = false;
+          setTimeout(() => {
+            console.log("....MOVING ON TO THE BATTLE PHASE..!");
+            this.gameStateStore.setPhase(CONST.PHASE.BATTLE);
+          }, 1000);
+        }, 1000);
+      }
+    },
+    setDisable: function (newState) {
+      this.playerAttacks.forEach((attack) => {
+        attack.isDisabled = newState;
+      });
+      this.oppAttacks.forEach((attack) => {
+        attack.isDisabled = newState;
+      });
+    },
+    setInitialState: function () {
+      this.playerAttacks.forEach((attack) => {
+        attack.isSelected = false;
+      });
+      this.oppAttacks.forEach((attack) => {
+        attack.isSelected = false;
+      });
+      this.playerAttack = "";
+      this.oppAttack = "";
+      this.gameStateStore.setPlayerAttack("");
+      this.gameStateStore.setOppAttack("");
     },
   },
 };

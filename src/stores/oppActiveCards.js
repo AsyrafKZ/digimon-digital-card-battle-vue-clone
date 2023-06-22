@@ -58,6 +58,7 @@ export const useOppActiveCardsStore = defineStore('oppActiveCards', {
             this.battleCard.hp = val
         },
         addHp(val) {
+            console.log(`val:${val}`)
             this.battleCard.hp = parseInt(this.battleCard.hp) + val
         },
         setAllPow(val) {

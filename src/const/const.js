@@ -13,13 +13,14 @@ export const CONST = {
     U: "U",
     // specialty
     FIRE: "Fire",
-    ICE: "",
-    NATURE: "",
-    DARKNESS: "",
-    RARE: "",
+    ICE: "Ice",
+    NATURE: "Nature",
+    DARKNESS: "Darkness",
+    RARE: "Rare",
     // game state
     PHASE: {
-        CHOOSE_CARD: "CHOOSE CARD"
+        BATTLE: "Battle",
+        CHOOSE_CARD: "Choose card"
     },
     // Players
     PLAYER: "player",

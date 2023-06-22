@@ -34,10 +34,7 @@
     </v-col>
   </v-row>
   <!-- Battle Window -->
-  <AttackSelectWindow
-  />
-    <!-- :playerCard="playerActiveCardsStore.battleCard"
-    :oppCard="oppActiveCardsStore.battleCard" -->
+  <AttackSelectWindow />
 </template>
 
 <script>
@@ -52,6 +49,8 @@ import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
 import { usePlayerDpStore } from "../stores/playerDp";
 import { useOppActiveCardsStore } from "../stores/oppActiveCards";
 import { useOppDpStore } from "../stores/oppDp";
+import { useGameStateStore } from "../stores/gameState";
+import { CONST } from "@/const/const";
 
 export default {
   components: {
@@ -77,7 +76,8 @@ export default {
       usePlayerActiveCardsStore,
       usePlayerDpStore,
       useOppActiveCardsStore,
-      useOppDpStore
+      useOppDpStore,
+      useGameStateStore
     ),
     playerOptionId() {
       return this.playerActiveCardsStore.optionId;
@@ -96,6 +96,15 @@ export default {
     },
     isOppOptionCard() {
       return this.isCard(this.oppActiveCardsStore.optionId);
+    },
+  },
+  watch: {
+    "gameStateStore.phase": function (currentPhase) {
+      console.log("----- NEW PHASE -----");
+      console.log(`----- ${currentPhase} -----`);
+      if (currentPhase == CONST.PHASE.BATTLE) {
+        this.gameStateStore.startBattle();
+      }
     },
   },
   methods: {
