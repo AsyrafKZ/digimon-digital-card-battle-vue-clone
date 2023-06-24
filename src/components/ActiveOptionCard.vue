@@ -1,45 +1,54 @@
 <template>
-  <div class="card-bg" :style="cssProps">
-    <div class="module top"></div>
-    <v-tooltip location="top" activator="parent">
-      <!-- lazy-src="https://static.wikia.nocookie.net/digimon/images/f/f2/Puppetmon_139_%28DDCB%29.jpg/revision/latest?cb=20160401023126" -->
-      <v-row>
-        <v-col>
-          <v-img :src="card.imgSrc" height="300" width="300" cover></v-img>
-        </v-col>
-        <v-col>
-          <v-row>
-            <v-col cols="1">
-              {{ card.name }}
-            </v-col>
-          </v-row>
+  <v-card theme="dark" variant="tonal" class="card-slot">
+    <div class="ma-0 mr-1">
+      <div class="card-bg" :style="cssProps">
+        <div class="module top"></div>
+        <v-tooltip location="top" activator="parent">
           <v-row>
             <v-col>
-              Effect:
-              <br />
-              {{ card.effect }}
+              <v-img :src="card.imgSrc" height="300" width="300" cover></v-img>
+            </v-col>
+            <v-col>
+              <v-row>
+                <v-col cols="1">
+                  {{ card.name }}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  Effect:
+                  <br />
+                  {{ card.effect }}
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
-        </v-col>
-      </v-row>
-    </v-tooltip>
-    <v-menu activator="parent" transition="slide-y-transition">
-      <v-col class="d-flex flex-row align-center">
-        <v-btn class="mx-1" size="small" color="green" icon @click="playCard">
-          <v-icon>mdi-transfer-up</v-icon>
-        </v-btn>
-        <v-btn
-          class="mx-1"
-          size="small"
-          color="blue"
-          icon
-          @click="activateEffect"
-        >
-          <v-icon>mdi-check</v-icon>
-        </v-btn>
-      </v-col>
-    </v-menu>
-  </div>
+        </v-tooltip>
+        <v-menu activator="parent" transition="slide-y-transition">
+          <v-col class="d-flex flex-row align-center">
+            <v-btn
+              class="mx-1"
+              size="small"
+              color="green"
+              icon
+              @click="playCard"
+            >
+              <v-icon>mdi-transfer-up</v-icon>
+            </v-btn>
+            <v-btn
+              class="mx-1"
+              size="small"
+              color="blue"
+              icon
+              @click="activateEffect"
+            >
+              <v-icon>mdi-check</v-icon>
+            </v-btn>
+          </v-col>
+        </v-menu>
+      </div>
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -76,11 +85,10 @@ export default {
     },
   },
   methods: {
-    playCard: function () {
-    },
+    playCard: function () {},
     activateEffect: function () {
       // do something
-      effects[0].effect("Player", 10)
+      effects[0].effect("Player", 10);
     },
   },
 };
@@ -132,5 +140,9 @@ export default {
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     var(--bg-option-image);
   background-size: cover;
+}
+
+.card-slot {
+  border-right: 2px solid #0d47a1;
 }
 </style>

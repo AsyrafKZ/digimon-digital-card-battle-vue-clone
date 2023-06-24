@@ -1,9 +1,8 @@
 <template>
-  <div class="card-bg" :style="cssProps">
+  <v-card theme="dark" class="card-slot">
+  <div class="card-bg ma-0 mr-1" :style="cssProps">
     <div class="module top"></div>
-    <v-tooltip location="top" activator="parent">
-      <!-- lazy-src="https://static.wikia.nocookie.net/digimon/images/f/f2/Puppetmon_139_%28DDCB%29.jpg/revision/latest?cb=20160401023126" -->
-      <v-row>
+    <v-tooltip location="top" activator="parent"><v-row>
         <v-col>
           <v-img :src="card.imgSrc" height="300" width="300" cover></v-img>
         </v-col>
@@ -40,6 +39,7 @@
       </v-col>
     </v-menu>
   </div>
+  </v-card>
 </template>
 
 <script>
@@ -173,5 +173,21 @@ export default {
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     var(--bg-option-image);
   background-size: cover;
+}
+.card-slot {
+  margin-left: 5px;
+  padding-left: 7px;
+  border-bottom: 5px solid #0d47a1;
+}
+
+/* border to extend to 20% from bottom right corner */
+.v-card.card-slot:after {
+  content: "";
+  background: #0d47a1;
+  position: absolute;
+  bottom: 0;
+  right: 0px;
+  height: 20%;
+  width: 5px;
 }
 </style>

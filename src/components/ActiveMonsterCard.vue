@@ -1,29 +1,39 @@
 <template>
-  <v-col cols="1">
-    <v-row>
-      <v-col>
-        〇 : {{ cPow }}
-        <br />
-        △ : {{ tPow }}
-        <br />
-        ✕ : {{ xPow }}
-        <br />
-        {{ xEffect }}
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col> HP : {{ hp }} </v-col>
-    </v-row>
-  </v-col>
-  <v-col cols="1">
-    <MonsterCard :id="id" :status="'playCard'" />
-  </v-col>
+  <v-card theme="dark">
+    <v-card-title class="name ma-0 pa-0 pt-1 pl-1">
+      {{ playerActiveCardsStore.battleCard.name }}
+    </v-card-title>
+    <div class="d-flex card-slot">
+      <v-card-item class="ma-0 pa-0">
+        <div>
+          <v-list-item
+            v-for="(attack, i) in attacks"
+            :key="i"
+            :class="attack.color"
+            density="compact"
+            class="px-1 py-0"
+          >
+            <template v-slot:prepend>
+              <v-icon v-if="attack.icon" :icon="attack.icon"></v-icon>
+            </template>
+            <span v-if="attack.powClass" v-bind:id="attack.id" :class="attack.powClass" class="text-right"></span>
+            <span v-else class="text-body-2 align-left"> {{ attack.val }}</span>
+          </v-list-item>
+          <!-- <span v-if="false" class="cPowChange">{{ cPowChange }}</span>
+          <span v-if="false" class="tPowChange">{{ tPowChange }}</span> -->
+        </div>
+      </v-card-item>
+      <MonsterCard class="ma-0 mr-1" :id="id" :status="playCard" />
+    </div>
+  </v-card>
 </template>
 
 <script>
 import MonsterCard from "./MonsterCard.vue";
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
+import { CONST } from '@/const/const';
+import anime from "animejs";
 
 export default {
   components: {
@@ -32,114 +42,154 @@ export default {
   data() {
     return {
       cPow: "0",
-      cPowInterval: false,
       tPow: "0",
-      tPowInterval: false,
       xPow: "0",
-      xPowInterval: false,
       hp: "0",
-      hpInterval: false,
+      cPowChange: "+0",
+      tPowChange: "+100",
+      playCard: CONST.PLAY_CARD,
     };
   },
-  ready() {
-      this.hp = this.playerActiveCardsStore.battleCard.hp
-        ? this.playerActiveCardsStore.battleCard.hp
-        : "";
-      this.cPow = this.playerActiveCardsStore.battleCard.cPow
-        ? this.playerActiveCardsStore.battleCard.cPow
-        : "";
-      this.tPow = this.playerActiveCardsStore.battleCard.tPow
-        ? this.playerActiveCardsStore.battleCard.tPow
-        : "";
-      this.xPow = this.playerActiveCardsStore.battleCard.xPow
-        ? this.playerActiveCardsStore.battleCard.xPow
-        : "";
+  mounted() {
+    this.cPow = this.animateValChange(
+      this.playerActiveCardsStore.battleCard.cPow,
+      "#plCpow"
+    );
+    this.tPow = this.animateValChange(
+      this.playerActiveCardsStore.battleCard.tPow,
+      "#plTpow"
+    );
+    this.xPow = this.animateValChange(
+      this.playerActiveCardsStore.battleCard.xPow,
+      "#plXpow"
+    );
+    this.hp = this.animateValChange(
+      this.playerActiveCardsStore.battleCard.hp,
+      "#plHp"
+    );
   },
   computed: {
     ...mapStores(usePlayerActiveCardsStore),
     id() {
-        return this.playerActiveCardsStore.battleCard.id;
+      return this.playerActiveCardsStore.battleCard.id;
     },
     xEffect() {
-        return this.playerActiveCardsStore.battleCard.xEffect;
+      return this.playerActiveCardsStore.battleCard.xEffect;
     },
+    playerCard() {
+      return this.playerActiveCardsStore.battleCard
+    },
+    attacks() {
+      return [
+        {
+          id: "plCpow",
+          val: this.playerCard.cPow,
+          icon: "mdi-circle-outline",
+          color: "bg-red",
+          powClass: "cPow",
+        },
+        {
+          id: "plTpow",
+          val: this.playerCard.tPow,
+          icon: "mdi-triangle-outline",
+          color: "bg-green",
+          powClass: "tPow",
+        },
+        {
+          id: "plXpow",
+          val: this.playerCard.xPow,
+          icon: "mdi-window-close",
+          color: "bg-blue",
+          powClass: "xPow",
+        },
+        {
+          id: "plXeff",
+          val: this.playerCard.xEffect,
+          icon: "",
+          color: "bg-blue-darken-1",
+          powClass: "",
+        },
+      ]
+    }
   },
   watch: {
-    "playerActiveCardsStore.battleCard.cPow"() {
-      clearInterval(this.cPowInterval);
-
-      if (this.playerActiveCardsStore.battleCard.cPow == this.cPow) {
-        return;
-      }
-
-      this.cPowInterval = window.setInterval(() => {
-        if (this.cPow != this.playerActiveCardsStore.battleCard.cPow) {
-          let change =
-            (parseInt(this.playerActiveCardsStore.battleCard.cPow) -
-              parseInt(this.cPow)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.cPow = parseInt(this.cPow) + change;
-        }
-      }, 25);
+    id() {
+      this.animateValChange(
+        this.playerActiveCardsStore.battleCard.cPow,
+        "#plCpow"
+      );
+      this.animateValChange(
+        this.playerActiveCardsStore.battleCard.tPow,
+        "#plTpow"
+      );
+      this.animateValChange(
+        this.playerActiveCardsStore.battleCard.xPow,
+        "#plXpow"
+      );
+      this.animateValChange(this.playerActiveCardsStore.battleCard.hp, "#plHp");
     },
-    "playerActiveCardsStore.battleCard.tPow"() {
-      clearInterval(this.tPowInterval);
-
-      if (this.playerActiveCardsStore.battleCard.tPow == this.tPow) {
-        return;
-      }
-
-      this.tPowInterval = window.setInterval(() => {
-        if (this.tPow != this.playerActiveCardsStore.battleCard.tPow) {
-          let change =
-            (parseInt(this.playerActiveCardsStore.battleCard.tPow) -
-              parseInt(this.tPow)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.tPow = parseInt(this.tPow) + change;
-        }
-      }, 25);
-    },
-    "playerActiveCardsStore.battleCard.xPow"() {
-      clearInterval(this.xPowInterval);
-
-      if (this.playerActiveCardsStore.battleCard.xPow == this.xPow) {
-        return;
-      }
-
-      this.xPowInterval = window.setInterval(() => {
-        if (this.xPow != this.playerActiveCardsStore.battleCard.xPow) {
-          let change =
-            (parseInt(this.playerActiveCardsStore.battleCard.xPow) -
-              parseInt(this.xPow)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.xPow = parseInt(this.xPow) + change;
-        }
-      }, 25);
-    },
-    "playerActiveCardsStore.battleCard.hp"() {
-      clearInterval(this.hpInterval);
-
-      if (this.playerActiveCardsStore.battleCard.hp == this.hp) {
-        return;
-      }
-
-      this.hpInterval = window.setInterval(() => {
-        if (this.hp != this.playerActiveCardsStore.battleCard.hp) {
-          let change =
-            (parseInt(this.playerActiveCardsStore.battleCard.hp) -
-              parseInt(this.hp)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.hp = parseInt(this.hp) + change;
-        }
-      }, 25);
+    // "playerActiveCardsStore.battleCard.cPow"(newValue) {
+    //   this.animateValChange(newValue, ".cPow");
+    // },
+    // "playerActiveCardsStore.battleCard.tPow"(newValue) {
+    //   this.animateValChange(newValue, ".tPow");
+    // },
+    // "playerActiveCardsStore.battleCard.xPow"(newValue) {
+    //   this.animateValChange(newValue, ".xPow");
+    // },
+    // "playerActiveCardsStore.battleCard.hp"(newValue) {
+    //   this.animateValChange(newValue, ".hp");
+    // },
+  },
+  methods: {
+    animateValChange: function (newValue, id) {
+      let valEl = document.querySelector(id);
+      let valObj = {
+        val: "0",
+      };
+      anime({
+        targets: valObj,
+        val: newValue,
+        round: 1,
+        easing: "linear",
+        update: function () {
+          valEl.innerHTML = valObj.val;
+        },
+      });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.cPowChange,
+.tPowChange {
+  position: absolute;
+  top: -10px;
+  left: 50px;
+  font-size: 200%;
+  font-style: italic;
+  font-weight: bold;
+  color: green;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+.name {
+  font-size: 1rem;
+  line-height: 1rem !important;
+  border-top: 1px solid #0D47A1;
+  border-bottom: 2px solid #0D47A1;
+  border-right: 2px solid #0D47A1;
+  border-left: 1px solid #0D47A1;
+  align-self: center;
+}
+.v-card-item {
+  min-width: 100px;
+}
+.v-list-item {
+  border: 1px solid #0D47A1;
+}
+.card-slot {
+  border-right: 2px solid #0D47A1;
+}
 </style>

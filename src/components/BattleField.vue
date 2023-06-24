@@ -8,14 +8,13 @@
     <ActiveMonsterCard v-if="isPlayerMonsterCard" />
     <EmptyCard v-else />
     <!-- Player A Option Card -->
-    <v-col v-show="turn == '3'" cols="auto">
-      <OptionCard
-        v-if="isPlayerOptionCard"
-        :id="playerOptionId"
-        :status="'playCard'"
-      />
-      <EmptyCard v-else />
-    </v-col>
+    <OptionCard
+      v-if="isPlayerOptionCard"
+      v-show="turn == '3'"
+      :id="playerOptionId"
+      :status="'playCard'"
+    />
+    <EmptyCard v-show="turn == '3'" v-else />
     <!-- Player B Option Card -->
     <v-col v-show="turn == '3'" cols="auto">
       <OppOptionCard
@@ -34,7 +33,7 @@
     </v-col>
   </v-row>
   <!-- Battle Window -->
-  <AttackSelectWindow />
+  <AttackSelectWindow class="mt-5" />
 </template>
 
 <script>

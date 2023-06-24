@@ -1,10 +1,15 @@
 <template>
-  <div class="card-bg" :class="{ move: moveCard }" :style="cssProps">
-    <div class="module top">
-      <h2>{{ card.level }}</h2>
+  <div v-bind:id="cardId" class="card-bg" :style="cssProps">
+    <div class="module">
+      <div class="level">
+        <h2>{{ card.level }}</h2>
+      </div>
+      <div v-if="showHp" class="hp-bar d-flex justify-space-between">
+        <div class="hp-text">HP</div>
+        <div id="plHp" class="hp">{{ card.hp }}</div>
+      </div>
     </div>
     <v-tooltip location="top" activator="parent">
-      <!-- lazy-src="https://static.wikia.nocookie.net/digimon/images/f/f2/Puppetmon_139_%28DDCB%29.jpg/revision/latest?cb=20160401023126" -->
       <v-row>
         <v-col>
           <v-img :src="card.imgSrc" height="300" width="300" cover></v-img>
@@ -94,7 +99,13 @@
         </v-tooltip>
         <v-tooltip text="Remove card" location="bottom">
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" class="mx-1" size="small" color="red" icon @click="runChosenCard(card.id)"
+            <v-btn
+              v-bind="props"
+              class="mx-1"
+              size="small"
+              color="red"
+              icon
+              @click="runChosenCard(card.id)"
               ><v-icon>mdi-card-remove</v-icon></v-btn
             >
           </template>
@@ -109,29 +120,18 @@ import { mapStores } from "pinia";
 import { usePlayerHandCardsStore } from "../stores/playerHandCards";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
 import { usePlayerDpStore } from "../stores/playerDp";
-import { useOppHandCardsStore } from "../stores/oppHandCards";
-import { useOppActiveCardsStore } from "../stores/oppActiveCards";
-import { useOppDpStore } from "../stores/oppDp";
-import { useGameStateStore } from "../stores/gameState"
+import { useGameStateStore } from "../stores/gameState";
 import { CONST } from "../const/const";
-// import { isValid } from "../utils/digivolve.js";
 import * as digivolve from "../utils/digivolve";
+import anime from "animejs";
 
 export default {
   props: ["id", "status"],
-  data() {
-    return {
-      moveCard: false,
-    };
-  },
   computed: {
     ...mapStores(
       usePlayerHandCardsStore,
       usePlayerActiveCardsStore,
       usePlayerDpStore,
-      useOppHandCardsStore,
-      useOppActiveCardsStore,
-      useOppDpStore,
       useGameStateStore
     ),
     card() {
@@ -188,11 +188,52 @@ export default {
         return true;
       }
     },
+    showHp() {
+      return this.status == CONST.PLAY_CARD ? true : false;
+    },
+    cardId() {
+      return `id${this.id}`;
+    },
   },
   methods: {
     playCard: function (digivolvePlay) {
-      this.playerHandCardsStore.setActiveMonsterCard(this.id, digivolvePlay);
-      this.playerHandCardsStore.discardOne(this.id);
+      // animate
+      let el = document.querySelector(`#${this.cardId}`);
+      let elPosX = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().left;
+      let activeElPosX = document
+        .getElementById(`id${this.playerActiveCardsStore.battleId}`)
+        .getBoundingClientRect().left;
+      let elPosY = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().top;
+      let activeElPosY = document
+        .getElementById(`id${this.playerActiveCardsStore.battleId}`)
+        .getBoundingClientRect().top;
+      let x = activeElPosX - elPosX;
+      let y = activeElPosY - elPosY;
+      let entryX = x + 15;
+
+      let animate = anime({
+        targets: el,
+        easing: "cubicBezier(.5, .05, .1, .3)",
+        keyframes: [
+          {
+            duration: 500,
+            translateY: y,
+            translateX: entryX,
+          },
+          { translateX: x, duration: 400 },
+        ],
+      });
+      animate.finished.then(() => {
+        // set
+        this.playerHandCardsStore.setActiveMonsterCard(this.id, digivolvePlay);
+        // discard
+        // TODO: make sure empty card slot can be seen once animation start
+        this.playerHandCardsStore.discardOne(this.id);
+      });
     },
     // TODO: undo dp storing
     storeCardDp: function () {
@@ -211,19 +252,13 @@ export default {
     },
     runChosenCard: function (id) {
       // set and trigger watch function at option card
-      this.gameStateStore.setChosenHandId(id)
+      this.gameStateStore.setChosenHandId(id);
     },
   },
 };
 </script>
 
 <style scoped>
-.move {
-  transform: translateY(100%);
-  transition: 1s;
-  border: 1px solid white;
-}
-
 .card-bg {
   background: linear-gradient(
     var(--bg-type-color-top),
@@ -237,7 +272,6 @@ export default {
   width: 108px;
   height: 125px;
   transition: margin 0.2s ease-in-out;
-  /* #E57373 */
 }
 .card-bg:hover {
   cursor: pointer;
@@ -245,17 +279,17 @@ export default {
 }
 
 .module {
+  --module-width: 100px;
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     var(--bg-monster-image);
   background-size: cover;
   border-radius: 7%;
   border: 2px solid var(--bg-type-color-top);
-  width: 100px;
+  width: var(--module-width);
   height: 100px;
   margin-top: 0.5em;
   padding: 0px;
   position: relative;
-  float: left;
   -webkit-mask-image: linear-gradient(
     45deg,
     #000 25%,
@@ -280,15 +314,33 @@ export default {
   opacity: 1;
 }
 
-.top h2 {
+.level h2 {
   color: white;
-  background: rgba(#222, 0.1);
   width: 1em;
   margin: 0;
   padding-left: 2px;
   text-align: start;
   font-size: xx-large;
   line-height: normal;
+}
+
+.hp-bar {
+  color: white;
+  width: inherit;
+  font-size: large;
+  position: absolute;
+  bottom: 0;
+  background: rgba(000, 000, 000, 0.4);
+}
+
+.hp-text {
+  margin-left: 3px;
+  text-align: start;
+}
+
+.hp {
+  margin-right: 6px;
+  text-align: end;
 }
 
 .tooltip-test {

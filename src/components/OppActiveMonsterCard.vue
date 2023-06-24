@@ -1,29 +1,39 @@
 <template>
-  <v-col cols="1">
-    <OppMonsterCard :id="id" :status="'playCard'" />
-  </v-col>
-  <v-col cols="1">
-    <v-row>
-      <v-col>
-        〇 : {{ cPow }}
-        <br />
-        △ : {{ tPow }}
-        <br />
-        ✕ : {{ xPow }}
-        <br />
-        {{ xEffect }}
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col> HP : {{ hp }} </v-col>
-    </v-row>
-  </v-col>
+  <v-card theme="dark">
+    <v-card-title class="name ma-0 pa-0 pt-1 pl-1">
+      {{ oppActiveCardsStore.battleCard.name }}
+    </v-card-title>
+    <div class="d-flex card-slot">
+      <OppMonsterCard class="ma-0 mr-1" :id="id" :status="playCard" />
+      <v-card-item class="ma-0 pa-0">
+        <div>
+          <v-list-item
+            v-for="(attack, i) in attacks"
+            :key="i"
+            :class="attack.color"
+            density="compact"
+            class="px-1 py-0"
+          >
+            <template v-slot:prepend>
+              <v-icon v-if="attack.icon" :icon="attack.icon"></v-icon>
+            </template>
+            <span v-if="attack.powClass" v-bind:id="attack.id" :class="attack.powClass" class="text-right"></span>
+            <span v-else class="text-body-2 align-left"> {{ attack.val }}</span>
+          </v-list-item>
+          <!-- <span v-if="false" class="cPowChange">{{ cPowChange }}</span>
+          <span v-if="false" class="tPowChange">{{ tPowChange }}</span> -->
+        </div>
+      </v-card-item>
+    </div>
+  </v-card>
 </template>
 
 <script>
 import OppMonsterCard from "./OppMonsterCard.vue";
 import { mapStores } from "pinia";
 import { useOppActiveCardsStore } from "../stores/oppActiveCards";
+import { CONST } from '@/const/const';
+import anime from "animejs";
 
 export default {
   components: {
@@ -32,28 +42,31 @@ export default {
   data() {
     return {
       cPow: "0",
-      cPowInterval: false,
       tPow: "0",
-      tPowInterval: false,
       xPow: "0",
-      xPowInterval: false,
       hp: "0",
-      hpInterval: false,
+      cPowChange: "+0",
+      tPowChange: "+100",
+      playCard: CONST.PLAY_CARD,
     };
   },
-  ready() {
-      this.hp = this.oppActiveCardsStore.battleCard.hp
-        ? this.oppActiveCardsStore.battleCard.hp
-        : "";
-      this.cPow = this.oppActiveCardsStore.battleCard.cPow
-        ? this.oppActiveCardsStore.battleCard.cPow
-        : "";
-      this.tPow = this.oppActiveCardsStore.battleCard.tPow
-        ? this.oppActiveCardsStore.battleCard.tPow
-        : "";
-      this.xPow = this.oppActiveCardsStore.battleCard.xPow
-        ? this.oppActiveCardsStore.battleCard.xPow
-        : "";
+  mounted() {
+    this.cPow = this.animateValChange(
+      this.oppActiveCardsStore.battleCard.cPow,
+      "#oppCpow"
+    );
+    this.tPow = this.animateValChange(
+      this.oppActiveCardsStore.battleCard.tPow,
+      "#oppTpow"
+    );
+    this.xPow = this.animateValChange(
+      this.oppActiveCardsStore.battleCard.xPow,
+      "#oppXpow"
+    );
+    this.hp = this.animateValChange(
+      this.oppActiveCardsStore.battleCard.hp,
+      "#oppHp"
+    );
   },
   computed: {
     ...mapStores(useOppActiveCardsStore),
@@ -63,83 +76,123 @@ export default {
     xEffect() {
         return this.oppActiveCardsStore.battleCard.xEffect;
     },
+    playerCard() {
+      return this.oppActiveCardsStore.battleCard
+    },
+    attacks() {
+      return [
+        {
+          id: `oppCpow`,
+          val: this.playerCard.cPow,
+          icon: "mdi-circle-outline",
+          color: "bg-red",
+          powClass: "cPow",
+        },
+        {
+          id: `oppTpow`,
+          val: this.playerCard.tPow,
+          icon: "mdi-triangle-outline",
+          color: "bg-green",
+          powClass: "tPow",
+        },
+        {
+          id: `oppXpow`,
+          val: this.playerCard.xPow,
+          icon: "mdi-window-close",
+          color: "bg-blue",
+          powClass: "xPow",
+        },
+        {
+          id: `oppXeff`,
+          val: this.playerCard.xEffect,
+          icon: "",
+          color: "bg-blue-darken-1",
+          powClass: "",
+        },
+      ]
+    },
+    cardId() {
+      return `id${this.id}`;
+    },
   },
   watch: {
-    "oppActiveCardsStore.battleCard.cPow"() {
-      clearInterval(this.cPowInterval);
-
-      if (this.oppActiveCardsStore.battleCard.cPow == this.cPow) {
-        return;
-      }
-
-      this.cPowInterval = window.setInterval(() => {
-        if (this.cPow != this.oppActiveCardsStore.battleCard.cPow) {
-          let change =
-            (parseInt(this.oppActiveCardsStore.battleCard.cPow) -
-              parseInt(this.cPow)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.cPow = parseInt(this.cPow) + change;
-        }
-      }, 25);
+    id() {
+      this.animateValChange(
+        this.oppActiveCardsStore.battleCard.cPow,
+        "#oppCpow"
+      );
+      this.animateValChange(
+        this.oppActiveCardsStore.battleCard.tPow,
+        "#oppTpow"
+      );
+      this.animateValChange(
+        this.oppActiveCardsStore.battleCard.xPow,
+        "#oppXpow"
+      );
+      this.animateValChange(this.oppActiveCardsStore.battleCard.hp, "#oppHp");
     },
-    "oppActiveCardsStore.battleCard.tPow"() {
-      clearInterval(this.tPowInterval);
-
-      if (this.oppActiveCardsStore.battleCard.tPow == this.tPow) {
-        return;
-      }
-
-      this.tPowInterval = window.setInterval(() => {
-        if (this.tPow != this.oppActiveCardsStore.battleCard.tPow) {
-          let change =
-            (parseInt(this.oppActiveCardsStore.battleCard.tPow) -
-              parseInt(this.tPow)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.tPow = parseInt(this.tPow) + change;
-        }
-      }, 25);
-    },
-    "oppActiveCardsStore.battleCard.xPow"() {
-      clearInterval(this.xPowInterval);
-
-      if (this.oppActiveCardsStore.battleCard.xPow == this.xPow) {
-        return;
-      }
-
-      this.xPowInterval = window.setInterval(() => {
-        if (this.xPow != this.oppActiveCardsStore.battleCard.xPow) {
-          let change =
-            (parseInt(this.oppActiveCardsStore.battleCard.xPow) -
-              parseInt(this.xPow)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.xPow = parseInt(this.xPow) + change;
-        }
-      }, 25);
-    },
-    "oppActiveCardsStore.battleCard.hp"() {
-      clearInterval(this.hpInterval);
-
-      if (this.oppActiveCardsStore.battleCard.hp == this.hp) {
-        return;
-      }
-
-      this.hpInterval = window.setInterval(() => {
-        if (this.hp != this.oppActiveCardsStore.battleCard.hp) {
-          let change =
-            (parseInt(this.oppActiveCardsStore.battleCard.hp) -
-              parseInt(this.hp)) /
-            10;
-          change = change >= 0 ? Math.ceil(change) : Math.floor(change);
-          this.hp = parseInt(this.hp) + change;
-        }
-      }, 25);
+    // "playerActiveCardsStore.battleCard.cPow"(newValue) {
+    //   this.animateValChange(newValue, ".cPow");
+    // },
+    // "playerActiveCardsStore.battleCard.tPow"(newValue) {
+    //   this.animateValChange(newValue, ".tPow");
+    // },
+    // "playerActiveCardsStore.battleCard.xPow"(newValue) {
+    //   this.animateValChange(newValue, ".xPow");
+    // },
+    // "playerActiveCardsStore.battleCard.hp"(newValue) {
+    //   this.animateValChange(newValue, ".hp");
+    // },
+  },
+  methods: {
+    animateValChange: function (newValue, id) {
+      let valEl = document.querySelector(id);
+      let valObj = {
+        val: "0",
+      };
+      anime({
+        targets: valObj,
+        val: newValue,
+        round: 1,
+        easing: "linear",
+        update: function () {
+          valEl.innerHTML = valObj.val;
+        },
+      });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.cPowChange,
+.tPowChange {
+  position: absolute;
+  top: -10px;
+  left: 50px;
+  font-size: 200%;
+  font-style: italic;
+  font-weight: bold;
+  color: green;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+.name {
+  font-size: 1rem;
+  line-height: 1rem !important;
+  border-top: 1px solid #0D47A1;
+  border-bottom: 2px solid #0D47A1;
+  border-right: 2px solid #0D47A1;
+  border-left: 1px solid #0D47A1;
+  align-self: center;
+}
+.v-card-item {
+  min-width: 100px;
+}
+.v-list-item {
+  border: 1px solid #0D47A1;
+}
+.card-slot {
+  border-right: 2px solid #0D47A1;
+}
 </style>

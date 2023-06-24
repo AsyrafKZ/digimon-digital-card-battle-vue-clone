@@ -37,23 +37,26 @@ const executeEffects = (speeds) => {
             // activate option card first
             const options = speeds.filter(el => el.id >= CONST.FIRST_OPTION_CARD_ID)
             if (options.length > 1) {
-                // activate 1st attack's option support first
+                // activate 1st attack's option support first, then 2nd attack's
                 if (this.firstAttack == CONST.PLAYER) {
                     effects[playerSupport.id].effect(CONST.PLAYER)
+                    effects[oppSupport.id].effect(CONST.OPP)
                 } else {
                     effects[oppSupport.id].effect(CONST.OPP)
+                    effects[playerSupport.id].effect(CONST.PLAYER)
                 }
             } else if (options.length == 1) {
                 effects[options[0].id].effect(options[0].user)
-            } else {
-                // activate 1st attack's monster support first
-                const monsters = speeds.filter(el => el.id < CONST.FIRST_OPTION_CARD_ID)
-                if (this.firstAttack == CONST.PLAYER) {
-                    effects[playerSupport.id].effect(CONST.PLAYER)
-                } else {
-                    effects[oppSupport.id].effect(CONST.OPP)
-                }
             }
+            // then, activate monster 
+            const monsters = speeds.filter(el => el.id < CONST.FIRST_OPTION_CARD_ID)
+            // activate 1st attack's monster support first, then 2nd attack's
+            if (this.firstAttack == CONST.PLAYER) {
+                effects[playerSupport.id].effect(CONST.PLAYER)
+            } else {
+                effects[oppSupport.id].effect(CONST.OPP)
+            }
+
         } else if (speeds.length == 1) {
             //
         }
@@ -111,11 +114,13 @@ export const useGameStateStore = defineStore('gameState', {
                 id: usePlayerActiveCardsStore().battleId,
                 user: CONST.PLAYER,
                 speed: usePlayerActiveCardsStore().xEffectSpeed,
+                isSupport: false,
             }
             const oppX = {
                 id: useOppActiveCardsStore().battleId,
                 user: CONST.OPP,
-                speed: useOppActiveCardsStore().xEffectSpeed
+                speed: useOppActiveCardsStore().xEffectSpeed,
+                isSupport: false,
             }
             const playerSupport = {
                 id: usePlayerActiveCardsStore().optionId,
@@ -135,10 +140,21 @@ export const useGameStateStore = defineStore('gameState', {
                 playerSupport,
                 oppSupport
             ]
+            // idea: sort by speed but scrape that
             effectsArr.sort((a, b) => {
                 return parseInt(a) - parseInt(b)
             })
+            // idea: process from fastest speed first, repeat the same process to the slowest speeed
             const speed3s = effectsArr.filter(el => el.speed == CONST.SPEED_3)
+            const speed2s = effectsArr.filter(el => el.speed == CONST.SPEED_2)
+            const speed1s = effectsArr.filter(el => el.speed == CONST.SPEED_1)
+
+            // Activate SPEED 3 effects
+            executeEffects(speed3s);
+            // Activate SPEED 2 effects
+            executeEffects(speed2s);
+            // Activate SPEED 1 effects
+            executeEffects(speed1s);
             if (speed3s.length > 0) {
                 if (speed3s.length > 1) {
                     // activate option card first
@@ -182,15 +198,13 @@ export const useGameStateStore = defineStore('gameState', {
                     //
                 }
             }
-            // Activate SPEED 2 effects
-            const speed2s = effectsArr.filter(el => el.speed == CONST.SPEED_2)
+
             if (speed2s.length > 0) {
                 if (speed2s.length > 1) {
                     //
                 }
             }
-            // Activate SPEED 1 effects
-            const speed1s = effectsArr.filter(el => el.speed == CONST.SPEED_1)
+
             if (speed1s.length > 0) {
                 if (speed1s.length > 1) {
                     //
