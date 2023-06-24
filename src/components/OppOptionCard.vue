@@ -177,13 +177,14 @@ export default {
 .card-slot {
   margin-left: 5px;
   padding-left: 7px;
-  border-bottom: 5px solid #0d47a1;
+  /* orange-darken-4 */
+  border-bottom: 5px solid #E65100;
 }
 
 /* border to extend to 20% from bottom right corner */
 .v-card.card-slot:after {
   content: "";
-  background: #0d47a1;
+  background: #E65100;
   position: absolute;
   bottom: 0;
   right: 0px;

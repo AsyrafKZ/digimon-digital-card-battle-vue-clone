@@ -177,11 +177,14 @@ export default {
 .name {
   font-size: 1rem;
   line-height: 1rem !important;
+  align-self: center;
+  /* blue-lighten-1 */
+  border-bottom: 2px solid #42A5F5;
+  /* blue-darken-4 */
   border-top: 1px solid #0D47A1;
-  border-bottom: 2px solid #0D47A1;
   border-right: 2px solid #0D47A1;
   border-left: 1px solid #0D47A1;
-  align-self: center;
+  background: #0D47A1 
 }
 .v-card-item {
   min-width: 100px;

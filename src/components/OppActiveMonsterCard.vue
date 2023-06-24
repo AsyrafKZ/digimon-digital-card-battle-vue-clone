@@ -180,19 +180,22 @@ export default {
 .name {
   font-size: 1rem;
   line-height: 1rem !important;
-  border-top: 1px solid #0D47A1;
-  border-bottom: 2px solid #0D47A1;
-  border-right: 2px solid #0D47A1;
-  border-left: 1px solid #0D47A1;
   align-self: center;
+  /* orange-lighten-1 */
+  border-bottom: 2px solid #FFA726;
+  /* orange-darken-4 */
+  border-top: 1px solid #E65100;
+  border-right: 2px solid #E65100;
+  border-left: 1px solid #E65100;
+  background: #E65100
 }
 .v-card-item {
   min-width: 100px;
 }
 .v-list-item {
-  border: 1px solid #0D47A1;
+  border: 1px solid #E65100;
 }
 .card-slot {
-  border-right: 2px solid #0D47A1;
+  border-right: 2px solid #E65100;
 }
 </style>
