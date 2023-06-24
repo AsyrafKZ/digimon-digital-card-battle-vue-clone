@@ -13,7 +13,7 @@
     </v-col>
   </v-row>
   <!-- Player A Info -->
-  <v-row class="my-1 text-center" justify="center" align="center">
+  <v-row class="my-1 text-center" justify="center" align="center" style="overflow: visible">
     <v-col > {{ deckName }} </v-col>
     <v-col > {{ playerName }} </v-col>
   </v-row>

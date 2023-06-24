@@ -197,7 +197,7 @@ export default {
   },
   methods: {
     playCard: function (digivolvePlay) {
-      // animate
+      // animate translation from hand to active slot
       let el = document.querySelector(`#${this.cardId}`);
       let elPosX = document
         .getElementById(this.cardId)

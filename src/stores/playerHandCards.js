@@ -5,6 +5,7 @@ import { usePlayerActiveCardsStore } from "./playerActiveCards";
 
 import { createMonsterCard, createOptionCard, setPenalty } from "@/utils/createCard";
 import { CONST } from '../const/const'
+import anime from "animejs";
 
 export const usePlayerHandCardsStore = defineStore('playerHandCards', {
     state: () => ({
@@ -54,35 +55,73 @@ export const usePlayerHandCardsStore = defineStore('playerHandCards', {
                 }
             }
         },
-        setAll() {
+        async setAll() {
             for (const hand in this.hands) {
                 if (Object.hasOwnProperty.call(this.hands, hand)) {
                     if (Object.keys(this.hands[hand]).length == 0) {
-                        this.hands[hand] = this.getCard();
+                        this.hands[hand] = await this.getCard(hand);
                     }
                 }
             }
         },
-        setOne() {
+        async setOne() {
             for (const hand in this.hands) {
                 if (Object.hasOwnProperty.call(this.hands, hand)) {
                     if (Object.keys(this.hands[hand]).length == 0) {
-                        this.hands[hand] = this.getCard();
+                        this.hands[hand] = await this.getCard();
                         break
                     }
                 }
             }
         },
-        getCard() {
+        async getCard(handId) {
             const card = usePlayerOnlineCardsStore().topCard
-            usePlayerOnlineCardsStore().drawOne()
-            if (card < CONST.FIRST_OPTION_CARD_ID) {
-                const monsterCard = createMonsterCard(card);
-                return monsterCard;
-            } else {
-                const optionCard = createOptionCard(card);
-                return optionCard;
-            }
+            // animate 
+            console.log("handId", handId)
+            let el = document.querySelector(`#playerDeck`)
+            let img = el.querySelector('#playerDeck > div > img')
+            // let elPosX = document
+            //     .getElementById(`#playerHand${handId}`)
+            //     .getBoundingClientRect().left;
+            let animate1 = anime({
+                targets: el,
+                easing: "linear",
+                translateX: 15,
+                rotateY: "90deg",
+                duration: 250,
+            })
+            let createdCard = null;
+            await animate1.finished.then(() => {
+                usePlayerOnlineCardsStore().drawOne()
+                if (card < CONST.FIRST_OPTION_CARD_ID) {
+                    createdCard = createMonsterCard(card);
+                } else {
+                    createdCard = createOptionCard(card);
+                }
+            })
+            img.src = createdCard.imgSrc
+            await anime({
+                targets: el,
+                easing: "linear",
+                duration: 250,
+                keyframes: [
+                    {
+                        rotateY: "0deg",
+                    },
+                    {
+                        rotateY: "90deg",
+                    },
+                ]
+            }).finished;
+            img.src = "src/images/card-back.png"
+            await anime({
+                targets: el,
+                easing: "linear",
+                duration: 250,
+                translateX: 0,
+                rotateY: "0deg",
+            }).finished;
+            return createdCard
         },
         setActiveMonsterCard: function (id, isDigivolvePlay = false) {
             let card = createMonsterCard(id)

@@ -17,7 +17,7 @@
         <div class="count text-h6 align-center">
           {{ playerOnlineCardsStore.count }}
         </div>
-        <div class="deck-holder">
+        <div id="playerDeck" class="deck-holder">
           <v-img
             class="deck player mb-1"
             :src="'src/images/card-back.png'"
@@ -29,6 +29,7 @@
       </div>
     </v-card>
   </div>
+  <!-- if opponent -->
   <div
     class="d-flex flex-column flex-no-wrap align-center justify-content opp-stacks"
     v-if="who == 'opponent'"
@@ -43,7 +44,7 @@
     </v-card>
     <v-card class="opp-bottom-card" theme="dark">
       <div class="online d-flex flex-row">
-        <div class="deck-holder">
+        <div id="oppDeck" class="deck-holder">
           <v-img
             class="deck opp mb-1"
             :src="'src/images/card-back.png'"
@@ -58,25 +59,6 @@
       </div>
     </v-card>
   </div>
-  <!-- if opponent -->
-  <!-- <div v-if="who == 'opponent'">
-    <div class="offline d-flex flex-row">
-      <div class="offline-bg">OFFLINE</div>
-      {{ oppOfflineCardsStore.count }}
-    </div>
-    <div class="online d-flex flex-row">
-      <div>
-        <v-img
-          class="deck opp mb-1"
-          :src="'src/images/card-back.png'"
-          height="85"
-          width="100"
-          @click="redraw('opp')"
-        ></v-img>
-      </div>
-      {{ oppOnlineCardsStore.count }}
-    </div>
-  </div> -->
 </template>
 
 <script>
@@ -164,6 +146,7 @@ export default {
 .player-bottom-card {
   /* blue-darken-4 */
   border-top: 1px solid #0D47A1;
+  overflow: visible;
 }
 .player-stacks {
   border-bottom: 4px solid #0D47A1;
