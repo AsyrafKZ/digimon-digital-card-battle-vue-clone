@@ -1,27 +1,21 @@
 <template>
-  <v-row class="player-board" :justify="center" :align="center">
+  <v-row :justify="center" :align="center">
     <!-- Player A DP -->
-    <v-col cols="auto">
-      <v-col> {{ playerDpStore.dp }} </v-col>
-    </v-col>
+    <span class="text-right mr-1">{{ playerDpStore.dp }}</span>
     <!-- Player A Playing Card -->
     <ActiveMonsterCard v-if="isPlayerMonsterCard" />
     <EmptyCard v-else />
     <!-- Player A Option Card -->
-    <PlayerActiveOptionCard v-if="isPlayerOptionCard" v-show="turn == '3'" />
+    <ActiveOptionCard v-if="isPlayerOptionCard" v-show="turn == '3'" />
     <EmptyCard v-show="turn == '3'" v-else />
     <!-- Player B Option Card -->
-    <v-col v-show="turn == '3'" cols="auto">
-      <OppActiveOptionCard v-if="isOppOptionCard" v-show="turn == '3'" />
-      <EmptyCard v-else />
-    </v-col>
+    <OppActiveOptionCard v-if="isOppOptionCard" v-show="turn == '3'" />
+    <EmptyCard v-show="turn == '3'" v-else />
     <!-- Player B Playing Card -->
     <OppActiveMonsterCard v-if="isOppMonsterCard" />
     <EmptyCard v-else />
     <!-- Player B DP -->
-    <v-col cols="auto">
-      <v-col> {{ oppDpStore.dp }} </v-col>
-    </v-col>
+    <span class="text-left ml-1"> {{ oppDpStore.dp }} </span>
   </v-row>
   <!-- Battle Window -->
   <AttackSelectWindow class="mt-5" />
@@ -34,7 +28,7 @@ import EmptyCard from "./EmptyCard.vue";
 import ActiveMonsterCard from "./ActiveMonsterCard.vue";
 import OppActiveMonsterCard from "./OppActiveMonsterCard.vue";
 import AttackSelectWindow from "./AttackSelectWindow.vue";
-import PlayerActiveOptionCard from "./ActiveOptionCard.vue";
+import ActiveOptionCard from "./ActiveOptionCard.vue";
 import OppActiveOptionCard from "./OppActiveOptionCard.vue";
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
@@ -52,7 +46,7 @@ export default {
     ActiveMonsterCard,
     OppActiveMonsterCard,
     AttackSelectWindow,
-    PlayerActiveOptionCard,
+    ActiveOptionCard,
     OppActiveOptionCard,
   },
   data() {

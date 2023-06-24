@@ -1,5 +1,5 @@
 <template>
-  <v-btn block color="warning">
+  <v-btn block color="purple-lighten-1">
     SELECT ATTACK
     <v-dialog v-model="open" activator="parent" width="600">
       <!-- Opponent -->

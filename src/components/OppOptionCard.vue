@@ -1,13 +1,13 @@
 <template>
   <div class="card-bg" :style="cssProps">
     <div class="module top"></div>
-    <v-tooltip location="top" activator="parent"><v-row>
+    <v-tooltip theme="light" location="top" activator="parent"><v-row>
         <v-col>
           <v-img :src="card.imgSrc" height="300" width="300" cover></v-img>
         </v-col>
         <v-col>
           <v-row>
-            <v-col cols="auto">
+            <v-col >
               {{ card.name }}
             </v-col>
           </v-row>
@@ -109,8 +109,8 @@ export default {
   border-radius: 7%;
   display: flex;
   justify-content: center;
-  padding: 0px;
-  margin: 1em;
+  padding: 0;
+  margin: 0;
   width: 108px;
   height: 125px;
   transition: margin 0.2s ease-in-out;

@@ -31,6 +31,7 @@ export default {
 <style scoped>
 .card-slot {
   margin-left: 5px;
+  margin-right: 1px;
   padding-left: 7px;
   /* blue-darken-4 */
   border-top: 5px solid #0d47a1;

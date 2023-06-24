@@ -35,9 +35,9 @@
 export default {
     data() {
         return {
-            socketId: "dummy id",
-            playerNameInput: "dummy player name",
-            deckNameInput: "dummy deck name",
+            socketId: "123abc",
+            playerNameInput: "Player",
+            deckNameInput: "Tricolor Deck",
         }
     },
     methods: {

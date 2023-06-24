@@ -4,7 +4,7 @@
       {{ oppActiveCardsStore.battleCard.name }}
     </v-card-title>
     <div class="d-flex card-slot">
-      <OppMonsterCard class="ma-0 mr-1" :id="id" :status="playCard" />
+      <OppMonsterCard class="ma-0 ml-1" :id="id" :status="playCard" />
       <v-card-item class="ma-0 pa-0">
         <div>
           <v-list-item
@@ -185,8 +185,8 @@ export default {
   border-bottom: 2px solid #FFA726;
   /* orange-darken-4 */
   border-top: 1px solid #E65100;
-  border-right: 2px solid #E65100;
-  border-left: 1px solid #E65100;
+  border-right: 1px solid #E65100;
+  border-left: 2px solid #E65100;
   background: #E65100
 }
 .v-card-item {
@@ -196,6 +196,6 @@ export default {
   border: 1px solid #E65100;
 }
 .card-slot {
-  border-right: 2px solid #E65100;
+  border-left: 2px solid #E65100;
 }
 </style>

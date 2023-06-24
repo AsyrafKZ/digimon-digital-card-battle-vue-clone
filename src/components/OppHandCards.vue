@@ -1,24 +1,24 @@
 <template>
   <!-- Hand 1 -->
-  <v-col cols="1">
+  <v-col class="left-edge ma-0 pa-0">
     <OppMonsterCard v-if="type1 == 'monster'" :id="id1" :status="'handCard'" />
     <OppOptionCard v-if="type1 == 'option'" :id="id1" :status="'handCard'" />
     <EmptyCard v-if="type1 == 'empty'" />
   </v-col>
   <!-- Hand 2 -->
-  <v-col cols="1">
+  <v-col class="ma-0 pa-0">
     <OppMonsterCard v-if="type2 == 'monster'" :id="id2" :status="'handCard'" />
     <OppOptionCard v-if="type2 == 'option'" :id="id2" :status="'handCard'" />
     <EmptyCard v-if="type2 == 'empty'" />
   </v-col>
   <!-- Hand 3 -->
-  <v-col cols="1">
+  <v-col class="ma-0 pa-0">
     <OppMonsterCard v-if="type3 == 'monster'" :id="id3" :status="'handCard'" />
     <OppOptionCard v-if="type3 == 'option'" :id="id3" :status="'handCard'" />
     <EmptyCard v-if="type3 == 'empty'" />
   </v-col>
   <!-- Hand 4 -->
-  <v-col cols="1">
+  <v-col class="ma-0 pa-0">
     <OppMonsterCard v-if="type4 == 'monster'" :id="id4" :status="'handCard'" />
     <OppOptionCard v-if="type4 == 'option'" :id="id4" :status="'handCard'" />
     <EmptyCard v-if="type4 == 'empty'" />
@@ -96,5 +96,15 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.v-col {
+  max-width: fit-content;
+  border-left: 2px solid #E65100;
+  border-right: 2px solid #E65100;
+  border-top: 4px solid #E65100;
+  background: #F57C00 
+}
+.v-col.left-edge  {
+  border-left: 4px solid #E65100;
+}
 </style>

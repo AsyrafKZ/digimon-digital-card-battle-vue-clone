@@ -1,6 +1,6 @@
 <template>
   <v-card theme="dark" class="card-slot">
-    <OppOptionCard class="ma-0 mr-1" :id="id" :status="playCard" />
+    <OppOptionCard class="ma-0 ml-1" :id="id" :status="playCard" />
   </v-card>
 </template>
 
@@ -30,8 +30,9 @@ export default {
 
 <style scoped>
 .card-slot {
-  margin-left: 5px;
-  padding-left: 7px;
+  margin-right: 5px;
+  margin-left: 1px;
+  padding-right: 7px;
   /* orange-darken-4 */
   border-bottom: 5px solid #E65100;
 }

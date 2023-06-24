@@ -1,26 +1,26 @@
 <template>
   <!-- Player A Hand -->
-  <v-row class="player-board my-1" :justify="center" :align="center">
+  <v-row class="my-1 player-side" justify="center" align="center">
     <!-- OnlineCards -->
     <OnlineCards :who="player" />
     <!-- Hand Cards -->
     <HandCards />
     <!-- Win Count -->
-    <v-col cols="auto">
+    <v-col>
       <div class="win-bar"></div>
       <div class="win-bar"></div>
       <div class="win-bar"></div>
     </v-col>
   </v-row>
   <!-- Player A Info -->
-  <v-row>
-    <v-col class="player-info" cols="6"> {{ deckName }} </v-col>
-    <v-col class="player-info" cols="6"> {{ playerName }} </v-col>
+  <v-row class="my-1 text-center" justify="center" align="center">
+    <v-col > {{ deckName }} </v-col>
+    <v-col > {{ playerName }} </v-col>
   </v-row>
 </template>
 
 <script>
-import { CONST } from '@/const/const';
+import { CONST } from "@/const/const";
 import OnlineCards from "./OnlineCards.vue";
 import HandCards from "./HandCards.vue";
 
@@ -31,15 +31,15 @@ export default {
   },
   data() {
     return {
-      playerName: "dummy player name",
-      deckName: "dummy deck name",
+      playerName: "Player A",
+      deckName: "Tricolor Deck",
       center: "center",
       player: null,
     };
   },
   created: function () {
-    this.player = CONST.PLAYER
-  }
+    this.player = CONST.PLAYER;
+  },
 };
 </script>
 
@@ -62,5 +62,12 @@ export default {
   height: 35px;
   color: red;
   text-align: center;
+}
+.v-col {
+  max-width: fit-content;
+}
+.player-side {
+  /* blue-darken-2 */
+  background: #1976D2;
 }
 </style>
