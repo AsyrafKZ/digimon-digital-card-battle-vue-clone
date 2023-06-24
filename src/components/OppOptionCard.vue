@@ -1,6 +1,5 @@
 <template>
-  <v-card theme="dark" class="card-slot">
-  <div class="card-bg ma-0 mr-1" :style="cssProps">
+  <div class="card-bg" :style="cssProps">
     <div class="module top"></div>
     <v-tooltip location="top" activator="parent"><v-row>
         <v-col>
@@ -39,7 +38,6 @@
       </v-col>
     </v-menu>
   </div>
-  </v-card>
 </template>
 
 <script>
@@ -173,22 +171,5 @@ export default {
   background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     var(--bg-option-image);
   background-size: cover;
-}
-.card-slot {
-  margin-left: 5px;
-  padding-left: 7px;
-  /* orange-darken-4 */
-  border-bottom: 5px solid #E65100;
-}
-
-/* border to extend to 20% from bottom right corner */
-.v-card.card-slot:after {
-  content: "";
-  background: #E65100;
-  position: absolute;
-  bottom: 0;
-  right: 0px;
-  height: 20%;
-  width: 5px;
 }
 </style>

@@ -8,20 +8,11 @@
     <ActiveMonsterCard v-if="isPlayerMonsterCard" />
     <EmptyCard v-else />
     <!-- Player A Option Card -->
-    <OptionCard
-      v-if="isPlayerOptionCard"
-      v-show="turn == '3'"
-      :id="playerOptionId"
-      :status="'playCard'"
-    />
+    <PlayerActiveOptionCard v-if="isPlayerOptionCard" v-show="turn == '3'" />
     <EmptyCard v-show="turn == '3'" v-else />
     <!-- Player B Option Card -->
     <v-col v-show="turn == '3'" cols="auto">
-      <OppOptionCard
-        v-if="isOppOptionCard"
-        :id="oppOptionId"
-        :status="'playCard'"
-      />
+      <OppActiveOptionCard v-if="isOppOptionCard" v-show="turn == '3'" />
       <EmptyCard v-else />
     </v-col>
     <!-- Player B Playing Card -->
@@ -43,6 +34,8 @@ import EmptyCard from "./EmptyCard.vue";
 import ActiveMonsterCard from "./ActiveMonsterCard.vue";
 import OppActiveMonsterCard from "./OppActiveMonsterCard.vue";
 import AttackSelectWindow from "./AttackSelectWindow.vue";
+import PlayerActiveOptionCard from "./ActiveOptionCard.vue";
+import OppActiveOptionCard from "./OppActiveOptionCard.vue";
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
 import { usePlayerDpStore } from "../stores/playerDp";
@@ -59,6 +52,8 @@ export default {
     ActiveMonsterCard,
     OppActiveMonsterCard,
     AttackSelectWindow,
+    PlayerActiveOptionCard,
+    OppActiveOptionCard,
   },
   data() {
     return {
@@ -78,12 +73,6 @@ export default {
       useOppDpStore,
       useGameStateStore
     ),
-    playerOptionId() {
-      return this.playerActiveCardsStore.optionId;
-    },
-    oppOptionId() {
-      return this.oppActiveCardsStore.optionId;
-    },
     isPlayerMonsterCard() {
       return this.isCard(this.playerActiveCardsStore.battleId);
     },
