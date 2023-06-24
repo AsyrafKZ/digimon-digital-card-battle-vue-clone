@@ -35,10 +35,41 @@ export const usePlayerHandCardsStore = defineStore('playerHandCards', {
         },
     },
     actions: {
-        discardAll() {
+        async discardAll() {
             for (const hand in this.hands) {
                 if (Object.hasOwnProperty.call(this.hands, hand)) {
-                    if (this.hands[hand].id > -1) {
+                    let handId = this.hands[hand].id
+                    if (handId > -1) {
+                        // animate
+                        let el = document.querySelector(`#id${handId}`)
+                        let img = this.hands[hand].imgSrc
+                        let elPosX = document
+                            .getElementById("playerOffline")
+                            .getBoundingClientRect().right;
+                        let elPosY = document
+                            .getElementById("playerOffline")
+                            .getBoundingClientRect().bottom;
+                        let currentElPosX = document
+                            .getElementById(`id${handId}`)
+                            .getBoundingClientRect().right;
+                        let currentElPosY = document
+                            .getElementById(`id${handId}`)
+                            .getBoundingClientRect().top;
+                        let x = Math.floor(elPosX) - Math.floor(currentElPosX);
+                        let y = Math.floor(currentElPosY) - Math.floor(elPosY) + 10;
+                        await anime({
+                            targets: el,
+                            easing: "cubicBezier(.5, .05, .1, .3)",
+                            duration: 500,
+                            translateX: x,
+                            translateY: y,
+                            rotate: "-90deg",
+                            scale: 0.4,
+                        }).finished;
+                        // image overwrite
+                        let elOffline = document.querySelector(`#playerOffline`)
+                        elOffline.style.background = `url(${img})`
+                        // logically remove the card
                         usePlayerOfflineCardsStore().setOffline(this.hands[hand].id)
                         this.hands[hand] = {}
                     }
@@ -74,21 +105,17 @@ export const usePlayerHandCardsStore = defineStore('playerHandCards', {
                 }
             }
         },
-        async getCard(handId) {
+        async getCard() {
             const card = usePlayerOnlineCardsStore().topCard
             // animate 
-            console.log("handId", handId)
             let el = document.querySelector(`#playerDeck`)
             let img = el.querySelector('#playerDeck > div > img')
-            // let elPosX = document
-            //     .getElementById(`#playerHand${handId}`)
-            //     .getBoundingClientRect().left;
             let animate1 = anime({
                 targets: el,
-                easing: "linear",
-                translateX: 15,
+                easing: "cubicBezier(.5, .05, .1, .3)",
+                translateX: 20,
                 rotateY: "90deg",
-                duration: 250,
+                duration: 100,
             })
             let createdCard = null;
             await animate1.finished.then(() => {
@@ -102,8 +129,8 @@ export const usePlayerHandCardsStore = defineStore('playerHandCards', {
             img.src = createdCard.imgSrc
             await anime({
                 targets: el,
-                easing: "linear",
-                duration: 250,
+                easing: "cubicBezier(.5, .05, .1, .3)",
+                duration: 100,
                 keyframes: [
                     {
                         rotateY: "0deg",
@@ -116,8 +143,8 @@ export const usePlayerHandCardsStore = defineStore('playerHandCards', {
             img.src = "src/images/card-back.png"
             await anime({
                 targets: el,
-                easing: "linear",
-                duration: 250,
+                easing: "cubicBezier(.5, .05, .1, .3)",
+                duration: 100,
                 translateX: 0,
                 rotateY: "0deg",
             }).finished;

@@ -1,5 +1,5 @@
 <template>
-  <div class="card-bg" :style="cssProps">
+  <div v-bind:id="cardId" class="card-bg" :style="cssProps">
     <div class="module top"></div>
     <v-tooltip theme="light" location="top" activator="parent">
       <v-row>
@@ -82,6 +82,9 @@ export default {
       return {
         "--bg-option-image": `linear-gradient(rgba(0, 0, 0, 0.1),rgba(0, 0, 0, 0.1)), url(${this.card.imgSrc})`,
       };
+    },
+    cardId() {
+      return `id${this.id}`;
     },
   },
   methods: {

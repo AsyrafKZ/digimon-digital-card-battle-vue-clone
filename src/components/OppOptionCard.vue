@@ -1,13 +1,14 @@
 <template>
-  <div class="card-bg" :style="cssProps">
+  <div v-bind:id="cardId" class="card-bg" :style="cssProps">
     <div class="module top"></div>
-    <v-tooltip theme="light" location="top" activator="parent"><v-row>
+    <v-tooltip theme="light" location="top" activator="parent"
+      ><v-row>
         <v-col>
           <v-img :src="card.imgSrc" height="300" width="300" cover></v-img>
         </v-col>
         <v-col>
           <v-row>
-            <v-col >
+            <v-col>
               {{ card.name }}
             </v-col>
           </v-row>
@@ -75,6 +76,9 @@ export default {
         "--bg-option-image": `linear-gradient(rgba(0, 0, 0, 0.1),rgba(0, 0, 0, 0.1)), url(${this.card.imgSrc})`,
       };
     },
+    cardId() {
+      return `id${this.id}`;
+    },
   },
   methods: {
     playCard: function () {
@@ -86,13 +90,13 @@ export default {
       this.oppHandCardsStore.discardOne(this.id);
     },
     activateEffect: function (id) {
-      const needIdEffect = []
-      const optionId = this.getIndex(id)
-      if (needIdEffect.includes(id)){
+      const needIdEffect = [];
+      const optionId = this.getIndex(id);
+      if (needIdEffect.includes(id)) {
         // TODO: make player choose card
         effects[optionId].effect("opp", id);
       } else {
-        const optionId = this.getIndex(id)
+        const optionId = this.getIndex(id);
         effects[optionId].effect("opp");
       }
     },

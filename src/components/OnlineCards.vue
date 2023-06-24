@@ -9,7 +9,9 @@
         <div class="count text-h6 align-center">
           {{ playerOfflineCardsStore.count }}
         </div>
-        <div class="offline-bg mr-2">OFFLINE</div>
+        <div class="offline-outer">
+          <div id="playerOffline" class="offline-bg text-body-2">OFFLINE</div>
+        </div>
       </div>
     </v-card>
     <v-card class="player-bottom-card" theme="dark">
@@ -21,8 +23,8 @@
           <v-img
             class="deck player mb-1"
             :src="'src/images/card-back.png'"
-            width="70"
-            height="85"
+            width="55"
+            height="75"
             @click="redraw('player')"
           ></v-img>
         </div>
@@ -86,9 +88,9 @@ export default {
     ),
   },
   methods: {
-    redraw: function (whoDraw) {
+    redraw: async function (whoDraw) {
       if (whoDraw == "player") {
-        this.playerHandCardsStore.discardAll();
+        await this.playerHandCardsStore.discardAll();
         this.playerHandCardsStore.setAll();
       } else {
         this.oppHandCardsStore.discardAll();
@@ -102,6 +104,7 @@ export default {
 <style scoped>
 .deck {
   transition: 0.2s ease-out;
+  left: 5px;
 }
 .deck:hover {
   box-shadow: 0px 0px 15px 0px #afe0f5;
@@ -114,63 +117,70 @@ export default {
 .deck.opp {
   rotate: 90deg;
 }
+.offline-outer {
+  width: 70px;
+  height: 55px;
+}
 .offline-bg {
   background: rgba(200, 200, 200, 0.1);
   border: 1px solid silver;
   border-radius: 7%;
-  width: 95px;
-  height: 35px;
-  color: red;
+  color: rgba(200, 200, 200, 0.7);
+  width: 65px;
+  height: 45px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top:5px;
 }
 .online {
-  height: 88px;
+  height: 70px;
 }
 .count {
   width: 40px;
   text-align: center;
   align-self: center;
 }
-.player-top-card, .player-bottom-card {
+.player-top-card,
+.player-bottom-card {
   /* blue-darken-2 */
-  background: #1976D2 ;
+  background: #1976d2;
   width: 125px;
   border-radius: 0%;
 }
 .player-top-card {
   /* blue-darken-4 */
-  border-bottom: 1px solid #0D47A1;
+  border-bottom: 1px solid #0d47a1;
 }
 .player-bottom-card {
   /* blue-darken-4 */
-  border-top: 1px solid #0D47A1;
+  border-top: 1px solid #0d47a1;
   overflow: visible;
 }
 .player-stacks {
-  border-bottom: 4px solid #0D47A1;
-  border-left: 4px solid #0D47A1;
-  border-right: 2px solid #0D47A1;
+  border-bottom: 4px solid #0d47a1;
+  border-left: 4px solid #0d47a1;
+  border-right: 2px solid #0d47a1;
 }
-.opp-top-card, .opp-bottom-card {
+.opp-top-card,
+.opp-bottom-card {
   /* orange-darken-2 */
-  background: #F57C00 ;
+  background: #f57c00;
   width: 125px;
   border-radius: 0%;
 }
 .opp-top-card {
   /* orange-darken-4 */
-  border-bottom: 1px solid #E65100;
-  }
+  border-bottom: 1px solid #e65100;
+}
 .opp-bottom-card {
   /* orange-darken-4 */
-  border-top: 1px solid #E65100;
+  border-top: 1px solid #e65100;
 }
 .opp-stacks {
-  border-top: 4px solid #E65100;
-  border-left: 4px solid #E65100;
-  border-right: 2px solid #E65100;
+  border-top: 4px solid #e65100;
+  border-left: 4px solid #e65100;
+  border-right: 2px solid #e65100;
 }
 .opp-bottom-card .online {
   justify-content: flex-end;
