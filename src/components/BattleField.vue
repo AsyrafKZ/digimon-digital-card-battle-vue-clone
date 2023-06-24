@@ -1,7 +1,7 @@
 <template>
-  <v-row :justify="center" :align="center">
+  <v-row class="my-4" :justify="center" :align="center">
     <!-- Player A DP -->
-    <span class="text-right mr-1">{{ playerDpStore.dp }}</span>
+    <DpSlot :who="'player'"/>
     <!-- Player A Playing Card -->
     <ActiveMonsterCard v-if="isPlayerMonsterCard" />
     <EmptyCard v-else />
@@ -14,11 +14,12 @@
     <!-- Player B Playing Card -->
     <OppActiveMonsterCard v-if="isOppMonsterCard" />
     <EmptyCard v-else />
-    <!-- Player B DP -->
-    <span class="text-left ml-1"> {{ oppDpStore.dp }} </span>
+    <DpSlot :who="'opp'" />
   </v-row>
   <!-- Battle Window -->
-  <AttackSelectWindow class="mt-5" />
+  <v-row v-show="turn == '3'">
+    <AttackSelectWindow class="my-4" />
+  </v-row>
 </template>
 
 <script>
@@ -30,11 +31,10 @@ import OppActiveMonsterCard from "./OppActiveMonsterCard.vue";
 import AttackSelectWindow from "./AttackSelectWindow.vue";
 import ActiveOptionCard from "./ActiveOptionCard.vue";
 import OppActiveOptionCard from "./OppActiveOptionCard.vue";
+import DpSlot from "./DpSlot.vue"
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
-import { usePlayerDpStore } from "../stores/playerDp";
 import { useOppActiveCardsStore } from "../stores/oppActiveCards";
-import { useOppDpStore } from "../stores/oppDp";
 import { useGameStateStore } from "../stores/gameState";
 import { CONST } from "@/const/const";
 
@@ -48,6 +48,7 @@ export default {
     AttackSelectWindow,
     ActiveOptionCard,
     OppActiveOptionCard,
+    DpSlot,
   },
   data() {
     return {
@@ -62,9 +63,7 @@ export default {
   computed: {
     ...mapStores(
       usePlayerActiveCardsStore,
-      usePlayerDpStore,
       useOppActiveCardsStore,
-      useOppDpStore,
       useGameStateStore
     ),
     isPlayerMonsterCard() {

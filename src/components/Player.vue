@@ -67,7 +67,7 @@ export default {
   max-width: fit-content;
 }
 .player-side {
-  /* blue-darken-2 */
-  background: #1976D2;
+  /* blue-darken-4 */
+  background: #0D47A1;
 }
 </style>

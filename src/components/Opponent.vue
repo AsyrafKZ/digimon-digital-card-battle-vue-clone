@@ -67,7 +67,7 @@ export default {
   max-width: fit-content;
 }
 .opp-side {
-  /* orange-darken-2 */
-  background: #F57C00;
+  /* orange-darken-4 */
+  background: #E65100;
 }
 </style>
