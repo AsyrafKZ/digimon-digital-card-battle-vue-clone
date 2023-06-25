@@ -57,6 +57,7 @@ import { usePlayerOfflineCardsStore } from "../stores/playerOfflineCards";
 import { useGameStateStore } from "../stores/gameState"
 import { CONST } from "@/const/const";
 import effects from "@/effects/option";
+import anime from "animejs";
 
 export default {
   props: ["id", "status"],
@@ -89,10 +90,42 @@ export default {
   },
   methods: {
     playCard: function () {
-      this.playerOfflineCardsStore.setOffline(this.playerActiveCardsStore.battleCard.id)
-      this.playerHandCardsStore.setActiveOptionCard(this.id);
+      // animate translation from hand to active slot
+      let el = document.querySelector(`#${this.cardId}`);
+      let elPosX = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().left;
+      let activeElPosX = document
+        .getElementById(`id${this.playerActiveCardsStore.optionId}`)
+        .getBoundingClientRect().left;
+      let elPosY = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().top;
+      let activeElPosY = document
+        .getElementById(`id${this.playerActiveCardsStore.optionId}`)
+        .getBoundingClientRect().top;
+      let x = activeElPosX - elPosX;
+      let y = activeElPosY - elPosY;
+      let entryY = y + 15;
+
+      let animate = anime({
+        targets: el,
+        easing: "cubicBezier(.5, .05, .1, .3)",
+        keyframes: [
+          {
+            duration: 500,
+            translateY: entryY,
+            translateX: x,
+          },
+          { translateY: y, duration: 400 },
+        ],
+      });
+      animate.finished.then(() => {
+        // logically set the card
+        this.playerHandCardsStore.setActiveOptionCard(this.id);
+        this.playerHandCardsStore.discardOne(this.id);
+      });
       
-      this.playerHandCardsStore.discardOne(this.id);
     },
     activateEffect: async function (id) {
       const needIdEffect = ["192"]
