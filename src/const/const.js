@@ -34,4 +34,5 @@ export const CONST = {
     SPEED_2: "2",
     SPEED_1: "1",
     SPEED_0: "0",
+    // Empty Card Types
 }

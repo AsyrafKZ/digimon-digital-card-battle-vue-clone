@@ -16,14 +16,25 @@
             <template v-slot:prepend>
               <v-icon v-if="attack.icon" :icon="attack.icon"></v-icon>
             </template>
-            <span v-if="attack.powClass" v-bind:id="attack.id" :class="attack.powClass" class="text-right"></span>
+            <span
+              v-if="attack.powClass"
+              v-bind:id="attack.id"
+              :class="attack.powClass"
+              class="text-right"
+            ></span>
             <span v-else class="text-body-2 align-left"> {{ attack.val }}</span>
           </v-list-item>
           <!-- <span v-if="false" class="cPowChange">{{ cPowChange }}</span>
           <span v-if="false" class="tPowChange">{{ tPowChange }}</span> -->
         </div>
       </v-card-item>
-      <MonsterCard class="ma-0 mr-1" :id="id" :status="playCard" />
+      <MonsterCard
+        v-show="id > -1"
+        class="ma-0 mr-1"
+        :id="id"
+        :status="playCard"
+      />
+      <EmptyCard v-if="id <= -1" :cardType="'activePlayerMonsterCard'" />
     </div>
   </v-card>
 </template>
@@ -32,12 +43,14 @@
 import MonsterCard from "./MonsterCard.vue";
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
-import { CONST } from '@/const/const';
+import { CONST } from "@/const/const";
+import EmptyCard from "./EmptyCard.vue";
 import anime from "animejs";
 
 export default {
   components: {
     MonsterCard,
+    EmptyCard,
   },
   data() {
     return {
@@ -51,33 +64,39 @@ export default {
     };
   },
   mounted() {
-    this.cPow = this.animateValChange(
-      this.playerActiveCardsStore.battleCard.cPow,
-      "#plCpow"
-    );
-    this.tPow = this.animateValChange(
-      this.playerActiveCardsStore.battleCard.tPow,
-      "#plTpow"
-    );
-    this.xPow = this.animateValChange(
-      this.playerActiveCardsStore.battleCard.xPow,
-      "#plXpow"
-    );
-    this.hp = this.animateValChange(
-      this.playerActiveCardsStore.battleCard.hp,
-      "#plHp"
-    );
+    if (this.id > -1) {
+      this.cPow = this.animateValChange(
+        this.playerActiveCardsStore.battleCard.cPow,
+        "#plCpow"
+      );
+      this.tPow = this.animateValChange(
+        this.playerActiveCardsStore.battleCard.tPow,
+        "#plTpow"
+      );
+      this.xPow = this.animateValChange(
+        this.playerActiveCardsStore.battleCard.xPow,
+        "#plXpow"
+      );
+      this.hp = this.animateValChange(
+        this.playerActiveCardsStore.battleCard.hp,
+        "#plHp"
+      );
+    }
   },
   computed: {
     ...mapStores(usePlayerActiveCardsStore),
     id() {
-      return this.playerActiveCardsStore.battleCard.id;
+      if (this.playerActiveCardsStore.battleCard.id > -1) {
+        return this.playerActiveCardsStore.battleCard.id;
+      } else {
+        return -1;
+      }
     },
     xEffect() {
       return this.playerActiveCardsStore.battleCard.xEffect;
     },
     playerCard() {
-      return this.playerActiveCardsStore.battleCard
+      return this.playerActiveCardsStore.battleCard;
     },
     attacks() {
       return [
@@ -109,24 +128,29 @@ export default {
           color: "bg-blue-darken-1",
           powClass: "",
         },
-      ]
-    }
+      ];
+    },
   },
   watch: {
-    id() {
-      this.animateValChange(
-        this.playerActiveCardsStore.battleCard.cPow,
-        "#plCpow"
-      );
-      this.animateValChange(
-        this.playerActiveCardsStore.battleCard.tPow,
-        "#plTpow"
-      );
-      this.animateValChange(
-        this.playerActiveCardsStore.battleCard.xPow,
-        "#plXpow"
-      );
-      this.animateValChange(this.playerActiveCardsStore.battleCard.hp, "#plHp");
+    id(newVal) {
+      if (newVal > -1) {
+        this.animateValChange(
+          this.playerActiveCardsStore.battleCard.cPow,
+          "#plCpow"
+        );
+        this.animateValChange(
+          this.playerActiveCardsStore.battleCard.tPow,
+          "#plTpow"
+        );
+        this.animateValChange(
+          this.playerActiveCardsStore.battleCard.xPow,
+          "#plXpow"
+        );
+        this.animateValChange(
+          this.playerActiveCardsStore.battleCard.hp,
+          "#plHp"
+        );
+      }
     },
     // "playerActiveCardsStore.battleCard.cPow"(newValue) {
     //   this.animateValChange(newValue, ".cPow");
@@ -177,22 +201,22 @@ export default {
 .name {
   font-size: 1rem;
   line-height: 1rem !important;
-  align-self: center;
   /* blue-lighten-1 */
-  border-bottom: 2px solid #42A5F5;
+  border-bottom: 2px solid #42a5f5;
   /* blue-darken-4 */
-  border-top: 1px solid #0D47A1;
-  border-right: 2px solid #0D47A1;
-  border-left: 1px solid #0D47A1;
-  background: #0D47A1 
+  border-top: 1px solid #0d47a1;
+  border-right: 2px solid #0d47a1;
+  border-left: 1px solid #0d47a1;
+  background: #0d47a1;
+  min-height: 1.5rem;
 }
 .v-card-item {
   min-width: 100px;
 }
 .v-list-item {
-  border: 1px solid #0D47A1;
+  border: 1px solid #0d47a1;
 }
 .card-slot {
-  border-right: 2px solid #0D47A1;
+  border-right: 2px solid #0d47a1;
 }
 </style>

@@ -3,8 +3,7 @@
     <!-- Player A DP -->
     <DpSlot :who="'player'"/>
     <!-- Player A Playing Card -->
-    <ActiveMonsterCard v-if="isPlayerMonsterCard" />
-    <EmptyCard v-else />
+    <ActiveMonsterCard />
     <!-- Player A Option Card -->
     <ActiveOptionCard v-if="isPlayerOptionCard" v-show="turn == '3'" />
     <EmptyCard v-show="turn == '3'" v-else />

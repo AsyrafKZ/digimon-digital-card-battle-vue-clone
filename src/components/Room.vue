@@ -70,8 +70,8 @@ export default {
     await this.cardsStore.getCardsGame(this.playerOnlineCardsStore.cards);
     await this.cardsStore.getCardsGame(this.oppOnlineCardsStore.cards);
 
-    this.playerHandCardsStore.setActiveMonsterCard("027");
-    this.playerHandCardsStore.setActiveOptionCard("211");
+    // this.playerHandCardsStore.setActiveMonsterCard("027");
+    // this.playerHandCardsStore.setActiveOptionCard("211");
     this.oppHandCardsStore.setActiveMonsterCard("156");
     this.oppHandCardsStore.setActiveOptionCard("231");
     this.gameStateStore.setWhoAttackFirst(CONST.PLAYER)

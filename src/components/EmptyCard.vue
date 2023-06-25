@@ -1,6 +1,21 @@
 <template>
-  <div class="card-bg"></div>
+  <div :id="id" class="card-bg"></div>
 </template>
+
+<script>
+export default {
+  props: ["cardType"],
+  computed: {
+    id: function () {
+      if (this.cardType == "activePlayerMonsterCard") {
+        return "activePlayerMonsterCard";
+      } else if (this.cardType == "activePlayerMonsterCard") {
+        return "activePlayerMonsterCard";
+      }
+    },
+  },
+};
+</script>
 
 <style scoped>
 .card-bg {
@@ -15,7 +30,3 @@
   height: 125px;
 }
 </style>
-
-<script>
-export default {};
-</script>

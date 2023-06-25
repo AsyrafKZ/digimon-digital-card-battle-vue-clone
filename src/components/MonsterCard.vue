@@ -202,15 +202,26 @@ export default {
       let elPosX = document
         .getElementById(this.cardId)
         .getBoundingClientRect().left;
-      let activeElPosX = document
-        .getElementById(`id${this.playerActiveCardsStore.battleId}`)
-        .getBoundingClientRect().left;
       let elPosY = document
-        .getElementById(this.cardId)
-        .getBoundingClientRect().top;
-      let activeElPosY = document
-        .getElementById(`id${this.playerActiveCardsStore.battleId}`)
-        .getBoundingClientRect().top;
+          .getElementById(this.cardId)
+          .getBoundingClientRect().top;
+      let activeElPosX = null;
+      let activeElPosY = null;
+      if (this.playerActiveCardsStore.battleId > -1) {
+        activeElPosX = document
+          .getElementById(`id${this.playerActiveCardsStore.battleId}`)
+          .getBoundingClientRect().left;
+        activeElPosY = document
+          .getElementById(`id${this.playerActiveCardsStore.battleId}`)
+          .getBoundingClientRect().top;
+      } else {
+        activeElPosX = document
+          .getElementById(`activePlayerMonsterCard`)
+          .getBoundingClientRect().left;
+        activeElPosY = document
+          .getElementById(`activePlayerMonsterCard`)
+          .getBoundingClientRect().top;
+      }
       let x = activeElPosX - elPosX;
       let y = activeElPosY - elPosY;
       let entryX = x + 15;
