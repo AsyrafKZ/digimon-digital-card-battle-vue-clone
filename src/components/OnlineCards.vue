@@ -131,7 +131,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top:5px;
+  margin-top: 5px;
 }
 .online {
   height: 70px;

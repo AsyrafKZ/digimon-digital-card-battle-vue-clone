@@ -228,17 +228,50 @@ export default {
         ],
       });
       animate.finished.then(() => {
-        // set
+        // logically set the card
         this.playerHandCardsStore.setActiveMonsterCard(this.id, digivolvePlay);
-        // discard
-        // TODO: make sure empty card slot can be seen once animation start
         this.playerHandCardsStore.discardOne(this.id);
       });
     },
     // TODO: undo dp storing
     storeCardDp: function () {
-      this.playerDpStore.store(this.id, this.card.pp);
-      this.playerHandCardsStore.discardOne(this.id);
+      // animate translation from hand to dp slot
+      let el = document.querySelector(`#${this.cardId}`);
+      let elPosX = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().left;
+      let targetX = document
+        .getElementById(`playerDp`)
+        .getBoundingClientRect().left;
+      let elPosY = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().top;
+      let targetY = document
+        .getElementById(`playerDp`)
+        .getBoundingClientRect().top;
+      let x = targetX - elPosX;
+      let y = targetY - elPosY - 20;
+      let animate = anime({
+        targets: el,
+        easing: "cubicBezier(.5, .05, .1, .3)",
+        translateX: x,
+        translateY: y,
+        scale: 0.4,
+        duration: 400,
+      });
+      animate.finished.then(() => {
+        // image overwrite
+        let elOffline = document.querySelector(`#playerDp`);
+        // TODO: probably need to fix this when images are fetched from API
+        const imgSrc = `src/images/monsters/${this.id
+          .toString()
+          .padStart(3, "0")}.jpg`;
+        elOffline.style.background = `url(${imgSrc})`;
+        elOffline.style.backgroundSize = "45px";
+        // logically store dp
+        this.playerDpStore.store(this.id, this.card.pp);
+        this.playerHandCardsStore.discardOne(this.id);
+      });
     },
     digivolve: function () {
       if (this.isDigivolveValid) {
