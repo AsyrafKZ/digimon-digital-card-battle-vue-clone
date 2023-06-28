@@ -120,18 +120,23 @@ export default {
 .offline-outer {
   width: 70px;
   height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center
 }
 .offline-bg {
   background: rgba(200, 200, 200, 0.1);
+  background-position: center;
   border: 1px solid silver;
   border-radius: 7%;
   color: rgba(200, 200, 200, 0.7);
-  width: 65px;
-  height: 45px;
+  rotate: -90deg;
+  width: 45px;
+  height: 65px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5px;
+  writing-mode: vertical-rl;
 }
 .online {
   height: 70px;

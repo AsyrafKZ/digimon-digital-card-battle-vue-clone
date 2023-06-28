@@ -9,7 +9,7 @@
           <v-list-item
             v-for="(attack, i) in attacks"
             :key="i"
-            :class="attack.color"
+            :class="attack.class"
             density="compact"
             class="px-1 py-0"
           >
@@ -20,12 +20,16 @@
               v-if="attack.powClass"
               v-bind:id="attack.id"
               :class="attack.powClass"
-              class="text-right"
             ></span>
-            <span v-else class="text-body-2 align-left"> {{ attack.val }}</span>
+            <span v-else class="text-body-2 text-left"> {{ attack.val }}</span>
+            <span
+              v-show="showPopup"
+              id="idCpowChange"
+              class="cPowChange text-h3"
+              >{{ cPowChange }}</span
+            >
           </v-list-item>
-          <!-- <span v-if="false" class="cPowChange">{{ cPowChange }}</span>
-          <span v-if="false" class="tPowChange">{{ tPowChange }}</span> -->
+          <!-- <span v-if="false" class="tPowChange">{{ tPowChange }}</span> -->
         </div>
       </v-card-item>
       <MonsterCard
@@ -34,17 +38,17 @@
         :id="id"
         :status="playCard"
       />
-      <EmptyCard v-if="id <= -1" :cardType="'activePlayerMonsterCard'" />
+      <EmptyCard v-if="id <= -1" :cardType="activeMonsterCard" />
     </div>
   </v-card>
 </template>
 
 <script>
 import MonsterCard from "./MonsterCard.vue";
+import EmptyCard from "./EmptyCard.vue";
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
 import { CONST } from "@/const/const";
-import EmptyCard from "./EmptyCard.vue";
 import anime from "animejs";
 
 export default {
@@ -58,9 +62,11 @@ export default {
       tPow: "0",
       xPow: "0",
       hp: "0",
-      cPowChange: "+0",
+      cPowChange: "+10",
       tPowChange: "+100",
       playCard: CONST.PLAY_CARD,
+      activeMonsterCard: CONST.ACTIVE_CARD.MONSTER_PLAYER,
+      showPopup: false,
     };
   },
   mounted() {
@@ -104,28 +110,28 @@ export default {
           id: "plCpow",
           val: this.playerCard.cPow,
           icon: "mdi-circle-outline",
-          color: "bg-red",
+          class: "bg-red text-right",
           powClass: "cPow",
         },
         {
           id: "plTpow",
           val: this.playerCard.tPow,
           icon: "mdi-triangle-outline",
-          color: "bg-green",
+          class: "bg-green text-right",
           powClass: "tPow",
         },
         {
           id: "plXpow",
           val: this.playerCard.xPow,
           icon: "mdi-window-close",
-          color: "bg-blue",
+          class: "bg-blue text-right",
           powClass: "xPow",
         },
         {
           id: "plXeff",
           val: this.playerCard.xEffect,
           icon: "",
-          color: "bg-blue-darken-1",
+          class: "bg-blue-darken-1 text-left",
           powClass: "",
         },
       ];
@@ -152,9 +158,9 @@ export default {
         );
       }
     },
-    // "playerActiveCardsStore.battleCard.cPow"(newValue) {
-    //   this.animateValChange(newValue, ".cPow");
-    // },
+    async "playerActiveCardsStore.battleCard.cPow"() {
+      await this.animatePopup("#idCpowChange");
+    },
     // "playerActiveCardsStore.battleCard.tPow"(newValue) {
     //   this.animateValChange(newValue, ".tPow");
     // },
@@ -181,6 +187,25 @@ export default {
         },
       });
     },
+    animatePopup: async function (id) {
+      let popupEl = document.querySelector(id);
+      this.showPopup = true;
+      await anime({
+        targets: popupEl,
+        easing: "linear",
+        translateY: -5,
+        duration: 100,
+        endDelay: 500,
+      }).finished.then(() => {
+        this.showPopup = false;
+        anime({
+          targets: popupEl,
+          easing: "easeOutCirc",
+          translateY: 5,
+          duration: 100,
+        });
+      });
+    },
   },
 };
 </script>
@@ -189,14 +214,15 @@ export default {
 .cPowChange,
 .tPowChange {
   position: absolute;
-  top: -10px;
-  left: 50px;
-  font-size: 200%;
+  top: -15px;
+  right: 10px;
   font-style: italic;
-  font-weight: bold;
-  color: green;
+  font-weight: bolder;
+  color: #4CAF50;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
+  z-index: 99;
+  overflow: visible;
 }
 .name {
   font-size: 1rem;
@@ -206,9 +232,15 @@ export default {
   /* blue-darken-4 */
   border-top: 1px solid #0d47a1;
   border-right: 2px solid #0d47a1;
-  border-left: 1px solid #0d47a1;
+  border-left: 1px solid #373a40;
   background: #0d47a1;
   min-height: 1.5rem;
+}
+/* .v-card.v-theme--dark.v-card--density-default.v-card--variant-elevated {
+  overflow: visible !important;
+} */
+::v-deep .v-card-item__content {
+  overflow: visible !important;
 }
 .v-card-item {
   min-width: 100px;

@@ -1,11 +1,14 @@
 <template>
   <v-card theme="dark" class="card-slot">
-    <OptionCard class="ma-0 mr-1" :id="id" :status="playCard" />
+    <OptionCard 
+        v-show="id > -1" class="ma-0 mr-1" :id="id" :status="playCard" />
+    <EmptyCard v-if="id <= -1" :cardType="activeOptionCard" />
   </v-card>
 </template>
 
 <script>
 import OptionCard from "./OptionCard.vue";
+import EmptyCard from "./EmptyCard.vue";
 import { mapStores } from "pinia";
 import { usePlayerActiveCardsStore } from "../stores/playerActiveCards";
 import { CONST } from "@/const/const";
@@ -13,16 +16,22 @@ import { CONST } from "@/const/const";
 export default {
   components: {
     OptionCard,
+    EmptyCard,
   },
   data() {
     return {
       playCard: CONST.PLAY_CARD,
+      activeOptionCard: CONST.ACTIVE_CARD.OPTION_PLAYER
     };
   },
   computed: {
     ...mapStores(usePlayerActiveCardsStore),
     id() {
-      return this.playerActiveCardsStore.optionCard.id;
+      if (this.playerActiveCardsStore.optionCard.id > -1) {
+        return this.playerActiveCardsStore.optionCard.id;
+      } else {
+        return -1;
+      }
     },
   },
 };

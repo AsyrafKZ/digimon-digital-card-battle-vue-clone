@@ -61,6 +61,11 @@ import anime from "animejs";
 
 export default {
   props: ["id", "status"],
+  data(){
+    return {
+      activeOptionCard: CONST.ACTIVE_CARD.OPTION_PLAYER
+    }
+  },
   computed: {
     ...mapStores(usePlayerHandCardsStore, usePlayerActiveCardsStore,usePlayerOfflineCardsStore, useGameStateStore),
     card() {
@@ -95,15 +100,26 @@ export default {
       let elPosX = document
         .getElementById(this.cardId)
         .getBoundingClientRect().left;
-      let activeElPosX = document
-        .getElementById(`id${this.playerActiveCardsStore.optionId}`)
-        .getBoundingClientRect().left;
       let elPosY = document
         .getElementById(this.cardId)
         .getBoundingClientRect().top;
-      let activeElPosY = document
-        .getElementById(`id${this.playerActiveCardsStore.optionId}`)
-        .getBoundingClientRect().top;
+      let activeElPosX = null;
+      let activeElPosY = null;
+      if (this.playerActiveCardsStore.optionId > -1) {
+        activeElPosX = document
+          .getElementById(`id${this.playerActiveCardsStore.optionId}`)
+          .getBoundingClientRect().left;
+        activeElPosY = document
+          .getElementById(`id${this.playerActiveCardsStore.optionId}`)
+          .getBoundingClientRect().top;
+      } else {
+        activeElPosX = document
+          .getElementById(this.activeOptionCard)
+          .getBoundingClientRect().left;
+        activeElPosY = document
+          .getElementById(this.activeOptionCard)
+          .getBoundingClientRect().top;
+      }
       let x = activeElPosX - elPosX;
       let y = activeElPosY - elPosY;
       let entryY = y + 15;

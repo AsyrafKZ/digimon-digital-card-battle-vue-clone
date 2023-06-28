@@ -35,4 +35,10 @@ export const CONST = {
     SPEED_1: "1",
     SPEED_0: "0",
     // Empty Card Types
+    ACTIVE_CARD: {
+        MONSTER_PLAYER: "activePlayerMonsterCard",
+        OPTION_PLAYER: "activePlayerOptionCard",
+        MONSTER_OPP: "activeOppMonsterCard",
+        OPTION_OPP: "activeOppOptionCard",
+    }
 }

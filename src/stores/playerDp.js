@@ -35,6 +35,7 @@ export const usePlayerDpStore = defineStore('playerDp', {
             // animate translation from dp slot to offline
             for (let i = 0; i < this.cards.length; i++) {
                 const card = this.cards[this.cards.length - 1 - i];
+                console.log("card", card, ". index:", this.cards.length - 1 - i)
                 let el = document.querySelector(`#playerDp`);
                 let elPosX = document
                     .getElementById("playerDp")
@@ -56,12 +57,13 @@ export const usePlayerDpStore = defineStore('playerDp', {
                 let y = targetY - elPosY;
                 let animate = anime({
                     targets: el,
-                    easing: "cubicBezier(.5, .05, .1, .3)",
+                    easing: "linear",
                     translateX: x,
                     translateY: y,
+                    rotate: "-90deg",
                     duration: 500,
                 });
-                animate.finished.then(() => {
+                await animate.finished.then(() => {
                     // dp slot image overwrite
                     el.style.background = `rgba(200, 200, 200, 0.1)`;
                     el.style.backgroundSize = "45px";
@@ -70,21 +72,17 @@ export const usePlayerDpStore = defineStore('playerDp', {
                     const imgSrc = `src/images/monsters/${card.toString().padStart(3, "0")}.jpg`;
                     let elOffline = document.querySelector(`#playerOffline`);
                     elOffline.style.background = `url(${imgSrc})`;
+                    elOffline.style.backgroundPosition = "center";
                 });
                 usePlayerOfflineCardsStore().setOffline(card)
                 // return the dp slot to its original position
-                let currentPosX = document
-                    .getElementById("playerDp")
-                    .getBoundingClientRect().left;
-                let currentPosY = document
-                    .getElementById("playerDp")
-                    .getBoundingClientRect().top;
                 await anime({
                     targets: el,
-                    easing: "cubicBezier(.5, .05, .1, .3)",
-                    translateX: this.pos.x - currentPosX,
-                    translateY: this.pos.y - currentPosY,
-                    duration: 500,
+                    easing: "linear",
+                    translateX: 0,
+                    translateY: 0,
+                    duration: 0,
+                    rotate: "0deg",
                 }).finished;
             }
             this.cards = []

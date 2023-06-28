@@ -8,7 +8,7 @@
     <v-card-item class="ma-0 pa-0">
       <span class="text-center text-h6">{{ playerDpStore.dp }}</span>
     </v-card-item>
-    <v-card-item class="ma-0 pa-0" style="overflow: visible">
+    <v-card-item class="ma-0 pa-0">
       <div
         :id="who == player ? 'playerDp' : 'oppDp'"
         class="dp-card mx-1"
@@ -76,8 +76,13 @@ export default {
   margin-top: 5px;
   height: 45px;
   width: 45px;
+  position: relative;
+  z-index: 10;
 }
-.v-card-item__content {
-  overflow: visible;
+::v-deep .v-card-item__content {
+  overflow: visible !important;
+}
+.v-card {
+  z-index: 1 !important;
 }
 </style>

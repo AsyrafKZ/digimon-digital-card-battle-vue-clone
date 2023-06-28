@@ -69,6 +69,7 @@ export const usePlayerHandCardsStore = defineStore('playerHandCards', {
                         // image overwrite
                         let elOffline = document.querySelector(`#playerOffline`)
                         elOffline.style.background = `url(${img})`
+                        elOffline.style.backgroundPosition = "center"
                         // logically remove the card
                         usePlayerOfflineCardsStore().setOffline(this.hands[hand].id)
                         this.hands[hand] = {}

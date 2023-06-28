@@ -127,6 +127,11 @@ import anime from "animejs";
 
 export default {
   props: ["id", "status"],
+  data() {
+    return {
+      activeMonsterCard: CONST.ACTIVE_CARD.MONSTER_PLAYER,
+    };
+  },
   computed: {
     ...mapStores(
       usePlayerHandCardsStore,
@@ -203,8 +208,8 @@ export default {
         .getElementById(this.cardId)
         .getBoundingClientRect().left;
       let elPosY = document
-          .getElementById(this.cardId)
-          .getBoundingClientRect().top;
+        .getElementById(this.cardId)
+        .getBoundingClientRect().top;
       let activeElPosX = null;
       let activeElPosY = null;
       if (this.playerActiveCardsStore.battleId > -1) {
@@ -216,10 +221,10 @@ export default {
           .getBoundingClientRect().top;
       } else {
         activeElPosX = document
-          .getElementById(`activePlayerMonsterCard`)
+          .getElementById(this.activeMonsterCard)
           .getBoundingClientRect().left;
         activeElPosY = document
-          .getElementById(`activePlayerMonsterCard`)
+          .getElementById(this.activeMonsterCard)
           .getBoundingClientRect().top;
       }
       let x = activeElPosX - elPosX;
@@ -285,6 +290,7 @@ export default {
       });
     },
     digivolve: function () {
+      // TODO: animate digivolve effect
       if (this.isDigivolveValid) {
         this.playCard(true);
         this.playerDpStore.flushAll();
@@ -316,6 +322,8 @@ export default {
   width: 108px;
   height: 125px;
   transition: margin 0.2s ease-in-out;
+  position: relative;
+  z-index: 11;
 }
 .card-bg:hover {
   cursor: pointer;

@@ -3,14 +3,16 @@
 </template>
 
 <script>
+import { CONST } from "@/const/const";
+
 export default {
   props: ["cardType"],
   computed: {
     id: function () {
-      if (this.cardType == "activePlayerMonsterCard") {
-        return "activePlayerMonsterCard";
-      } else if (this.cardType == "activePlayerMonsterCard") {
-        return "activePlayerMonsterCard";
+      if (this.cardType == CONST.ACTIVE_CARD.MONSTER_PLAYER) {
+        return CONST.ACTIVE_CARD.MONSTER_PLAYER;
+      } else if (this.cardType == CONST.ACTIVE_CARD.OPTION_PLAYER) {
+        return CONST.ACTIVE_CARD.OPTION_PLAYER;
       }
     },
   },

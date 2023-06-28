@@ -5,8 +5,7 @@
     <!-- Player A Playing Card -->
     <ActiveMonsterCard />
     <!-- Player A Option Card -->
-    <ActiveOptionCard v-if="isPlayerOptionCard" v-show="turn == '3'" />
-    <EmptyCard v-show="turn == '3'" v-else />
+    <ActiveOptionCard v-show="turn == '3'" />
     <!-- Player B Option Card -->
     <OppActiveOptionCard v-if="isOppOptionCard" v-show="turn == '3'" />
     <EmptyCard v-show="turn == '3'" v-else />
@@ -16,7 +15,7 @@
     <DpSlot :who="'opp'" />
   </v-row>
   <!-- Battle Window -->
-  <v-row v-show="turn == '3'">
+  <v-row v-show="turn == '2'">
     <AttackSelectWindow class="my-4" />
   </v-row>
 </template>

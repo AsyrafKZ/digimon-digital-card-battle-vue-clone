@@ -16,8 +16,8 @@ import { usePlayerOnlineCardsStore } from "../stores/playerOnlineCards";
 import { usePlayerHandCardsStore } from "../stores/playerHandCards";
 import { useOppOnlineCardsStore } from "../stores/oppOnlineCards";
 import { useOppHandCardsStore } from "../stores/oppHandCards";
-import { useGameStateStore } from "../stores/gameState"
-import { CONST } from '@/const/const';
+import { useGameStateStore } from "../stores/gameState";
+import { CONST } from "@/const/const";
 
 export default {
   components: {
@@ -74,7 +74,7 @@ export default {
     // this.playerHandCardsStore.setActiveOptionCard("211");
     this.oppHandCardsStore.setActiveMonsterCard("156");
     this.oppHandCardsStore.setActiveOptionCard("231");
-    this.gameStateStore.setWhoAttackFirst(CONST.PLAYER)
+    this.gameStateStore.setWhoAttackFirst(CONST.PLAYER);
   },
   mounted: async function () {
     // register Socket.IO event listeners
