@@ -127,6 +127,11 @@ import anime from "animejs";
 
 export default {
   props: ["id", "status"],
+  data() {
+    return {
+      activeMonsterCard: CONST.ACTIVE_CARD.OPP_PLAYER,
+    };
+  },
   computed: {
     ...mapStores(
       useOppHandCardsStore,
@@ -162,7 +167,6 @@ export default {
         this.card.level,
         "opp"
       );
-      console.log(`name:${this.card.name}, msg:${msg}`);
       return isValid;
     },
     isPlayValid() {
@@ -196,20 +200,31 @@ export default {
   },
   methods: {
     playCard: function (digivolvePlay) {
-      // animate
+      // animate translation from hand to active slot
       let el = document.querySelector(`#${this.cardId}`);
       let elPosX = document
         .getElementById(this.cardId)
         .getBoundingClientRect().left;
-      let activeElPosX = document
-        .getElementById(`id${this.oppActiveCardsStore.battleId}`)
-        .getBoundingClientRect().left;
       let elPosY = document
         .getElementById(this.cardId)
         .getBoundingClientRect().top;
-      let activeElPosY = document
+      let activeElPosX = null;
+      let activeElPosY = null;
+      if (this.oppActiveCardsStore.battleId > -1) {
+        activeElPosX = document
+          .getElementById(`id${this.oppActiveCardsStore.battleId}`)
+          .getBoundingClientRect().left;
+      activeElPosY = document
         .getElementById(`id${this.oppActiveCardsStore.battleId}`)
-        .getBoundingClientRect().top;
+        .getBoundingClientRect().top;  
+      } else {
+        activeElPosX = document
+          .getElementById(this.activeMonsterCard)
+          .getBoundingClientRect().left;
+        activeElPosY = document
+          .getElementById(this.activeMonsterCard)
+          .getBoundingClientRect().top;
+      }
       let x = activeElPosX - elPosX;
       let y = activeElPosY - elPosY;
       let entryX = x - 15;
@@ -227,17 +242,50 @@ export default {
         ],
       });
       animate.finished.then(() => {
-        // set
+        // logically set the card
         this.oppHandCardsStore.setActiveMonsterCard(this.id, digivolvePlay);
-        // discard
-        // TODO: make sure empty card slot can be seen once animation start
         this.oppHandCardsStore.discardOne(this.id);
       });
     },
     // TODO: undo dp storing
     storeCardDp: function () {
-      this.oppDpStore.store(this.id, this.card.pp);
-      this.oppHandCardsStore.discardOne(this.id);
+      // animate translation from hand to dp slot
+      let el = document.querySelector(`#${this.cardId}`);
+      let elPosX = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().left;
+      let targetX = document
+        .getElementById(`oppDp`)
+        .getBoundingClientRect().left;
+      let elPosY = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().top;
+      let targetY = document
+        .getElementById(`oppDp`)
+        .getBoundingClientRect().top;
+      let x = targetX - elPosX - 20;
+      let y = targetY - elPosY - 20;
+      let animate = anime({
+        targets: el,
+        easing: "cubicBezier(.5, .05, .1, .3)",
+        translateX: x,
+        translateY: y,
+        scale: 0.4,
+        duration: 400,
+      });
+      animate.finished.then(() => {
+        // image overwrite
+        let elOffline = document.querySelector(`#oppDp`);
+        // TODO: probably need to fix this when images are fetched from API
+        const imgSrc = `src/images/monsters/${this.id
+          .toString()
+          .padStart(3, "0")}.jpg`;
+        elOffline.style.background = `url(${imgSrc})`;
+        elOffline.style.backgroundSize = "45px";
+        // logically store dp
+        this.oppDpStore.store(this.id, this.card.pp);
+        this.oppHandCardsStore.discardOne(this.id);
+      });
     },
     digivolve: function () {
       if (this.isDigivolveValid) {

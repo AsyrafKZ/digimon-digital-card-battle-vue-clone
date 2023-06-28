@@ -6,7 +6,8 @@
   >
     <v-card-title class="title ma-0 pa-0"> DP </v-card-title>
     <v-card-item class="ma-0 pa-0">
-      <span class="text-center text-h6">{{ playerDpStore.dp }}</span>
+      <span v-if="who == player" class="text-center text-h6">{{ playerDpStore.dp }}</span>
+      <span v-else class="text-center text-h6">{{ oppDpStore.dp }}</span>
     </v-card-item>
     <v-card-item class="ma-0 pa-0">
       <div
@@ -15,7 +16,8 @@
       ></div>
     </v-card-item>
     <v-card-item class="ma-0 pa-0">
-      <span class="text-center text-h6">{{ playerDpStore.stackCount }}/8</span>
+      <span v-if="who == player" class="text-center text-h6">{{ playerDpStore.stackCount }}/8</span>
+      <span v-else class="text-center text-h6">{{ oppDpStore.stackCount }}/8</span>
     </v-card-item>
   </v-card>
 </template>
@@ -23,6 +25,7 @@
 <script>
 import { mapStores } from "pinia";
 import { usePlayerDpStore } from "../stores/playerDp";
+import { useOppDpStore } from "../stores/oppDp";
 import { CONST } from "@/const/const";
 
 export default {
@@ -30,10 +33,11 @@ export default {
   data() {
     return {
       player: CONST.PLAYER,
+      opp: CONST.OPP,
     };
   },
   computed: {
-    ...mapStores(usePlayerDpStore),
+    ...mapStores(usePlayerDpStore, useOppDpStore),
   },
 };
 </script>

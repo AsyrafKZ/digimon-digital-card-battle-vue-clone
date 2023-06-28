@@ -2,7 +2,7 @@
   <!-- if player -->
   <div
     class="d-flex flex-column flex-no-wrap align-center justify-content player-stacks"
-    v-if="who == 'player'"
+    v-if="who == player"
   >
     <v-card class="player-top-card" theme="dark">
       <div class="offline d-flex flex-row">
@@ -37,21 +37,23 @@
     v-if="who == 'opponent'"
   >
     <v-card class="opp-top-card" theme="dark">
-      <div class="offline d-flex flex-row">
-        <div class="offline-bg ml-2">OFFLINE</div>
+      <div class="offline d-flex flex-row-reverse">
         <div class="count text-h6 align-center">
           {{ oppOfflineCardsStore.count }}
+        </div>
+        <div class="offline-outer">
+          <div id="oppOffline" class="offline-bg text-body-2">OFFLINE</div>
         </div>
       </div>
     </v-card>
     <v-card class="opp-bottom-card" theme="dark">
       <div class="online d-flex flex-row">
-        <div id="oppDeck" class="deck-holder">
+        <div id="oppDeck" class="deck-holder pr-3">
           <v-img
             class="deck opp mb-1"
             :src="'src/images/card-back.png'"
-            width="70"
-            height="85"
+            width="55"
+            height="75"
             @click="redraw('opp')"
           ></v-img>
         </div>
@@ -71,11 +73,14 @@ import { usePlayerHandCardsStore } from "../stores/playerHandCards";
 import { useOppOnlineCardsStore } from "../stores/oppOnlineCards";
 import { useOppOfflineCardsStore } from "../stores/oppOfflineCards";
 import { useOppHandCardsStore } from "../stores/oppHandCards";
+import { CONST } from "@/const/const";
 
 export default {
   props: ["who"],
   data() {
-    return {};
+    return {
+      player: CONST.PLAYER,
+    };
   },
   computed: {
     ...mapStores(
@@ -89,11 +94,11 @@ export default {
   },
   methods: {
     redraw: async function (whoDraw) {
-      if (whoDraw == "player") {
+      if (whoDraw == this.player) {
         await this.playerHandCardsStore.discardAll();
         this.playerHandCardsStore.setAll();
       } else {
-        this.oppHandCardsStore.discardAll();
+        await this.oppHandCardsStore.discardAll();
         this.oppHandCardsStore.setAll();
       }
     },
@@ -122,7 +127,7 @@ export default {
   height: 55px;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 .offline-bg {
   background: rgba(200, 200, 200, 0.1);

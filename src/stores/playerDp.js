@@ -35,7 +35,6 @@ export const usePlayerDpStore = defineStore('playerDp', {
             // animate translation from dp slot to offline
             for (let i = 0; i < this.cards.length; i++) {
                 const card = this.cards[this.cards.length - 1 - i];
-                console.log("card", card, ". index:", this.cards.length - 1 - i)
                 let el = document.querySelector(`#playerDp`);
                 let elPosX = document
                     .getElementById("playerDp")

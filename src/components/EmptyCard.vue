@@ -13,7 +13,11 @@ export default {
         return CONST.ACTIVE_CARD.MONSTER_PLAYER;
       } else if (this.cardType == CONST.ACTIVE_CARD.OPTION_PLAYER) {
         return CONST.ACTIVE_CARD.OPTION_PLAYER;
-      }
+      } else if (this.cardType == CONST.ACTIVE_CARD.MONSTER_OPP) {
+        return CONST.ACTIVE_CARD.MONSTER_OPP;
+      } else if (this.cardType == CONST.ACTIVE_CARD.OPTION_OPP) {
+        return CONST.ACTIVE_CARD.OPTION_OPP;
+      } 
     },
   },
 };

@@ -48,9 +48,15 @@ import { useOppActiveCardsStore } from "../stores/oppActiveCards";
 import { useOppOfflineCardsStore } from "../stores/oppOfflineCards";
 import { CONST } from "@/const/const";
 import effects from "@/effects/option";
+import anime from "animejs";
 
 export default {
   props: ["id", "status"],
+  data(){
+    return {
+      activeOptionCard: CONST.ACTIVE_CARD.OPTION_OPP
+    }
+  },
   computed: {
     ...mapStores(
       useOppHandCardsStore,
@@ -82,12 +88,51 @@ export default {
   },
   methods: {
     playCard: function () {
-      this.oppOfflineCardsStore.setOffline(
-        this.oppActiveCardsStore.battleCard.id
-      );
-      this.oppHandCardsStore.setActiveOptionCard(this.id);
+      // animate translation from hand to active slot
+      let el = document.querySelector(`#${this.cardId}`);
+      let elPosX = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().left;
+      let elPosY = document
+        .getElementById(this.cardId)
+        .getBoundingClientRect().top;
+      let activeElPosX = null;
+      let activeElPosY = null;
+      if (this.oppActiveCardsStore.optionId > -1) {
+        activeElPosX = document
+          .getElementById(`id${this.oppActiveCardsStore.optionId}`)
+          .getBoundingClientRect().left;
+        activeElPosY = document
+          .getElementById(`id${this.oppActiveCardsStore.optionId}`)
+          .getBoundingClientRect().top;
+      } else {
+        activeElPosX = document
+          .getElementById(this.activeOptionCard)
+          .getBoundingClientRect().left;
+        activeElPosY = document
+          .getElementById(this.activeOptionCard)
+          .getBoundingClientRect().top;
+      }
+      let x = activeElPosX - elPosX;
+      let y = activeElPosY - elPosY;
+      let entryY = y - 15;
 
-      this.oppHandCardsStore.discardOne(this.id);
+      let animate = anime({
+        targets: el,
+        easing: "cubicBezier(.5, .05, .1, .3)",
+        keyframes: [
+          {
+            duration: 500,
+            translateY: entryY,
+            translateX: x,
+          },
+          { translateY: y, duration: 400 },
+        ],
+      });
+      animate.finished.then(() => {
+        this.oppHandCardsStore.setActiveOptionCard(this.id);
+        this.oppHandCardsStore.discardOne(this.id);
+      });
     },
     activateEffect: function (id) {
       const needIdEffect = [];

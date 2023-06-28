@@ -5,6 +5,7 @@ import { useOppActiveCardsStore } from "./oppActiveCards";
 
 import { createMonsterCard, createOptionCard, setPenalty } from "@/utils/createCard";
 import { CONST } from '../const/const'
+import anime from "animejs";
 
 export const useOppHandCardsStore = defineStore('oppHandCards', {
     state: () => ({
@@ -34,13 +35,45 @@ export const useOppHandCardsStore = defineStore('oppHandCards', {
         },
     },
     actions: {
-        discardAll() {
-            for (const hand in this.hands) {
-                if (Object.hasOwnProperty.call(this.hands, hand)) {
-                    if (this.hands[hand].id > -1) {
-                        useOppOfflineCardsStore().setOffline(this.hands[hand].id)
-                        this.hands[hand] = {}
-                    }
+        async discardAll() {
+            const len = Object.keys(this.hands).length
+            for (let i = 0; i < len; i++) {
+                const hand = `hand${len - i}`
+                const handId = this.hands[hand].id;
+                if (handId > -1) {
+                    // animate
+                    let el = document.querySelector(`#id${handId}`)
+                    let img = this.hands[hand].imgSrc
+                    let elPosX = document
+                        .getElementById("oppOffline")
+                        .getBoundingClientRect().right;
+                    let elPosY = document
+                        .getElementById("oppOffline")
+                        .getBoundingClientRect().bottom;
+                    let currentElPosX = document
+                        .getElementById(`id${handId}`)
+                        .getBoundingClientRect().right;
+                    let currentElPosY = document
+                        .getElementById(`id${handId}`)
+                        .getBoundingClientRect().top;
+                    let x = Math.floor(elPosX) - Math.floor(currentElPosX);
+                    let y = Math.floor(currentElPosY) - Math.floor(elPosY) + 10;
+                    await anime({
+                        targets: el,
+                        easing: "cubicBezier(.5, .05, .1, .3)",
+                        duration: 500,
+                        translateX: x,
+                        translateY: y,
+                        rotate: "90deg",
+                        scale: 0.4,
+                    }).finished;
+                    // image overwrite
+                    let elOffline = document.querySelector(`#oppOffline`)
+                    elOffline.style.background = `url(${img})`
+                    elOffline.style.backgroundPosition = "center"
+                    // logically remove the card
+                    useOppOfflineCardsStore().setOffline(this.hands[hand].id)
+                    this.hands[hand] = {}
                 }
             }
         },
@@ -54,35 +87,69 @@ export const useOppHandCardsStore = defineStore('oppHandCards', {
                 }
             }
         },
-        setAll() {
+        async setAll() {
             for (const hand in this.hands) {
                 if (Object.hasOwnProperty.call(this.hands, hand)) {
                     if (Object.keys(this.hands[hand]).length == 0) {
-                        this.hands[hand] = this.getCard();
+                        this.hands[hand] = await this.getCard(hand);
                     }
                 }
             }
         },
-        setOne() {
+        async setOne() {
             for (const hand in this.hands) {
                 if (Object.hasOwnProperty.call(this.hands, hand)) {
                     if (Object.keys(this.hands[hand]).length == 0) {
-                        this.hands[hand] = this.getCard();
+                        this.hands[hand] = await this.getCard();
                         break
                     }
                 }
             }
         },
-        getCard() {
+        async getCard() {
             const card = useOppOnlineCardsStore().topCard
-            useOppOnlineCardsStore().drawOne()
-            if (card < CONST.FIRST_OPTION_CARD_ID) {
-                const monsterCard = createMonsterCard(card);
-                return monsterCard;
-            } else {
-                const optionCard = createOptionCard(card);
-                return optionCard;
-            }
+            // animate 
+            let el = document.querySelector(`#oppDeck`)
+            let img = el.querySelector('#oppDeck > div > img')
+            let animate1 = anime({
+                targets: el,
+                easing: "cubicBezier(.5, .05, .1, .3)",
+                translateX: 20,
+                rotateY: "90deg",
+                duration: 100,
+            })
+            let createdCard = null;
+            await animate1.finished.then(() => {
+                useOppOnlineCardsStore().drawOne()
+                if (card < CONST.FIRST_OPTION_CARD_ID) {
+                    createdCard = createMonsterCard(card);
+                } else {
+                    createdCard = createOptionCard(card);
+                }
+            })
+            img.src = createdCard.imgSrc
+            await anime({
+                targets: el,
+                easing: "cubicBezier(.5, .05, .1, .3)",
+                duration: 100,
+                keyframes: [
+                    {
+                        rotateY: "0deg",
+                    },
+                    {
+                        rotateY: "90deg",
+                    },
+                ]
+            }).finished;
+            img.src = "src/images/card-back.png"
+            await anime({
+                targets: el,
+                easing: "cubicBezier(.5, .05, .1, .3)",
+                duration: 100,
+                translateX: 0,
+                rotateY: "0deg",
+            }).finished;
+            return createdCard
         },
         setActiveMonsterCard: function (id, isDigivolvePlay = false) {
             let card = createMonsterCard(id)

@@ -72,7 +72,7 @@ export default {
 
     // this.playerHandCardsStore.setActiveMonsterCard("027");
     // this.playerHandCardsStore.setActiveOptionCard("211");
-    this.oppHandCardsStore.setActiveMonsterCard("156");
+    this.oppHandCardsStore.setActiveMonsterCard("063");
     this.oppHandCardsStore.setActiveOptionCard("231");
     this.gameStateStore.setWhoAttackFirst(CONST.PLAYER);
   },
