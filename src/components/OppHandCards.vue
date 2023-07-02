@@ -101,9 +101,10 @@ export default {
   max-width: fit-content;
   border-left: 2px solid #E65100;
   border-right: 2px solid #E65100;
-  border-top: 4px solid #E65100;
+  border-top: 5px solid #E65100;
   background: #F57C00 
 }
+
 .v-col.left-edge  {
   border-left: 4px solid #E65100;
 }

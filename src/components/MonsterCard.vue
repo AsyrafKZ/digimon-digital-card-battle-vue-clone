@@ -50,7 +50,7 @@
         </v-col>
       </v-row>
     </v-tooltip>
-    <v-menu activator="parent" transition="slide-y-transition">
+    <v-menu activator="parent" transition="slide-y-transition" eager>
       <v-col class="d-flex flex-row align-center">
         <v-tooltip text="Play" location="bottom">
           <template v-slot:activator="{ props }">
@@ -321,13 +321,13 @@ export default {
   margin: 0;
   width: 108px;
   height: 125px;
-  transition: margin 0.2s ease-in-out;
   position: relative;
   z-index: 11;
+  transition-timing-function: ease-in-out;
 }
 .card-bg:hover {
   cursor: pointer;
-  margin-top: 5px;
+  transform: translateY(-5px);
 }
 
 .module {

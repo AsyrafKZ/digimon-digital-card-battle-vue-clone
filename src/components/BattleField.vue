@@ -7,11 +7,9 @@
     <!-- Player A Option Card -->
     <ActiveOptionCard v-show="turn == '3'" />
     <!-- Player B Option Card -->
-    <OppActiveOptionCard v-if="isOppOptionCard" v-show="turn == '3'" />
-    <EmptyCard v-show="turn == '3'" v-else />
+    <OppActiveOptionCard v-show="turn == '3'" />
     <!-- Player B Playing Card -->
-    <OppActiveMonsterCard v-if="isOppMonsterCard" />
-    <EmptyCard v-else />
+    <OppActiveMonsterCard/>
     <DpSlot :who="'opp'" />
   </v-row>
   <!-- Battle Window -->
@@ -64,18 +62,6 @@ export default {
       useOppActiveCardsStore,
       useGameStateStore
     ),
-    isPlayerMonsterCard() {
-      return this.isCard(this.playerActiveCardsStore.battleId);
-    },
-    isOppMonsterCard() {
-      return this.isCard(this.oppActiveCardsStore.battleId);
-    },
-    isPlayerOptionCard() {
-      return this.isCard(this.playerActiveCardsStore.optionId);
-    },
-    isOppOptionCard() {
-      return this.isCard(this.oppActiveCardsStore.optionId);
-    },
   },
   watch: {
     "gameStateStore.phase": function (currentPhase) {

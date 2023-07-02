@@ -42,7 +42,9 @@
           {{ oppOfflineCardsStore.count }}
         </div>
         <div class="offline-outer">
-          <div id="oppOffline" class="offline-bg text-body-2">OFFLINE</div>
+          <div id="oppOffline" class="offline-bg text-body-2">
+            <div class="offline-text-opp">OFFLINE</div>
+            </div>
         </div>
       </div>
     </v-card>
@@ -143,6 +145,12 @@ export default {
   align-items: center;
   writing-mode: vertical-rl;
 }
+#oppOffline.offline-bg {
+  rotate: 90deg;
+}
+.offline-text-opp {
+  rotate: 180deg;
+}
 .online {
   height: 70px;
 }
@@ -155,7 +163,7 @@ export default {
 .player-bottom-card {
   /* blue-darken-2 */
   background: #1976d2;
-  width: 125px;
+  width: 110px;
   border-radius: 0%;
 }
 .player-top-card {
@@ -176,7 +184,7 @@ export default {
 .opp-bottom-card {
   /* orange-darken-2 */
   background: #f57c00;
-  width: 125px;
+  width: 110px;
   border-radius: 0%;
 }
 .opp-top-card {
@@ -188,7 +196,7 @@ export default {
   border-top: 1px solid #e65100;
 }
 .opp-stacks {
-  border-top: 4px solid #e65100;
+  border-top: 3px solid #e65100;
   border-left: 4px solid #e65100;
   border-right: 2px solid #e65100;
 }

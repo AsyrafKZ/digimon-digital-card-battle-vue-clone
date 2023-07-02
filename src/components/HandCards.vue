@@ -85,8 +85,7 @@ export default {
       if (id >= 0) {
         if (id < CONST.FIRST_OPTION_CARD_ID) {
           return "monster"
-        }
-        else {
+        } else {
           return "option"
         }
       } else {
@@ -102,7 +101,7 @@ export default {
   max-width: fit-content;
   border-left: 2px solid #0D47A1;
   border-right: 2px solid #0D47A1;
-  border-bottom: 4px solid #0D47A1;
+  border-bottom: 5px solid #0D47A1;
   background: #1976D2 
 }
 

@@ -178,12 +178,13 @@ export default {
   margin: 0;
   width: 108px;
   height: 125px;
-  transition: margin 0.2s ease-in-out;
-  /* #E57373 */
+  position: relative;
+  z-index: 11;
+  transition-timing-function: ease-in-out;
 }
 .card-bg:hover {
   cursor: pointer;
-  margin-top: 5px;
+  transform: translateY(-5px);
 }
 
 .module {

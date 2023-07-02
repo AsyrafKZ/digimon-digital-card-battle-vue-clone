@@ -187,7 +187,8 @@ export default {
   border-top: 1px solid #E65100;
   border-right: 1px solid #E65100;
   border-left: 2px solid #E65100;
-  background: #E65100
+  background: #E65100;
+  border-top-right-radius: 0%;
 }
 .v-card-item {
   min-width: 100px;

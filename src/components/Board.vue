@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height justify-center bg-blue-grey-darken-4 board">
     <!-- Main Board class="playing-field" -->
-    <v-container >
+    <v-container>
       <!-- Player B -->
       <Opponent />
       <!-- Battle Field -->
@@ -35,8 +35,8 @@ export default {
   width: 900px
 }
 .playing-field {
-  /* blue-darken-2 */
-  background: #1976D2;
+  /* blue-grey-darken-2 */
+  background: #455A64;
   width: fit-content;
   height: fit-content;
 }
