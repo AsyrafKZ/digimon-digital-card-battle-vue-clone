@@ -319,7 +319,8 @@ export default {
   width: 108px;
   height: 125px;
   transition: margin 0.2s ease-in-out;
-  animation-fill-mode: initial;
+  position: relative;
+  z-index: 11;
 }
 .card-bg:hover {
   cursor: pointer;

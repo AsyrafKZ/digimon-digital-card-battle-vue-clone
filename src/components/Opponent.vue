@@ -1,6 +1,6 @@
 <template>
   <!-- Player B Info -->
-  <v-row class="my-1 text-center" justify="center" align="center">
+  <v-row class="my-1 text-center text-h6" justify="center" align="center">
     <v-col> {{ deckName }} </v-col>
     <v-col> {{ playerName }} </v-col>
   </v-row>

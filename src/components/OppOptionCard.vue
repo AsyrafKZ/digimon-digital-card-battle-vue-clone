@@ -163,6 +163,8 @@ export default {
   width: 108px;
   height: 125px;
   transition: margin 0.2s ease-in-out;
+  position: relative;
+  z-index: 11;
   /* #E57373 */
 }
 .card-bg:hover {
